@@ -3,14 +3,34 @@
 // One entry per lesson. Add `ready:true` and create the matching
 // HTML file to make a lesson appear in the toolbar and home grid.
 // ============================================================
+// `topics` drives the in-lesson subnav (rendered by renderSubnav). Each topic
+// id must match the id of a <div class="page"> in that lesson's HTML file.
 const ECOLOGY_CLASSES = [
-  { num: 1, label: 'גידול אוכלוסייה',        file: 'class-1-population-growth.html',   desc: 'גידול אקספוננציאלי, טרנספורמציית ln, כושר נשיאה K וגידול לוגיסטי.', ready: false },
-  { num: 2, label: 'מבנה חברה',               file: 'class-2-community-structure.html', desc: 'עושר מינים, שפע יחסי, מדד שאנון, מגוון α β γ והקשר שטח-מינים.', ready: true },
+  { num: 1, label: 'גידול אוכלוסייה',        file: 'class-1-population-growth.html',   desc: 'גידול אקספוננציאלי, טרנספורמציית ln, כושר נשיאה K וגידול לוגיסטי.', ready: true,
+    topics: [
+      { id: 'p1', label: 'גידול אקספוננציאלי' },
+      { id: 'p2', label: 'הערכת r מנתונים' },
+      { id: 'p3', label: 'גידול לוגיסטי ו-K' },
+      { id: 'p4', label: 'תחזית, Allee ותרגול' },
+    ] },
+  { num: 2, label: 'מבנה חברה',               file: 'class-2-community-structure.html', desc: 'עושר מינים, שפע יחסי, מדד שאנון, מגוון α β γ והקשר שטח-מינים.', ready: true,
+    topics: [
+      { id: 'p1', label: 'תיאור חברה' },
+      { id: 'p2', label: 'עקומת צבירה' },
+      { id: 'p3', label: 'מגוון α β γ' },
+      { id: 'p4', label: 'שטח–מינים' },
+    ] },
   { num: 3, label: 'לוטקה-וולטרה',            file: 'class-3-lotka-volterra.html',       desc: 'תחרות וטריפה בין שני מינים ודינמיקת שיווי משקל.', ready: false },
   { num: 4, label: 'רשתות אקולוגיות',         file: 'class-4-scientific-paper.html',     desc: 'קריאת מאמר מדעי ורשתות אינטראקציה אקולוגיות.', ready: false },
   { num: 5, label: 'הכנה לסיור',              file: 'class-5-pre-trip.html',              desc: 'הכנה לסיור השדה — שיטות דגימה ותכנון.', ready: false },
   { num: 6, label: 'TIME',                    file: 'class-6-time.html',                 desc: 'דינמיקה בזמן וניתוח סדרות עתיות אקולוגיות.', ready: false },
 ];
+
+// Look up the lesson whose file matches the page currently being viewed.
+function currentClass() {
+  const currentFile = location.pathname.split('/').pop() || 'index.html';
+  return ECOLOGY_CLASSES.find(c => c.file === currentFile) || null;
+}
 
 // ============================================================
 // SITE-WIDE TOOLBAR (lesson picker)
@@ -30,6 +50,79 @@ function renderSiteNav() {
     `<span class="nav-sep"></span>`,
     ...ready.map(c => btn(c.file, `שיעור ${c.num}: ${c.label}`, currentFile === c.file))
   ].join('');
+}
+
+// ============================================================
+// WITHIN-LESSON TOPIC NAV (subnav)
+// Rendered from the current lesson's `topics` in the registry, so a
+// new lesson only declares its topics once — no hand-written buttons.
+// ============================================================
+function renderSubnav() {
+  const nav = document.getElementById('classSubnav');
+  if (!nav) return;
+  const cls = currentClass();
+  if (!cls || !cls.topics) return;
+  const btn = (page, label, isActive) =>
+    `<button class="nav-btn ${isActive ? 'active' : ''}" data-page="${page}" onclick="showPage('${page}')">${label}</button>`;
+  nav.innerHTML = [
+    btn('home', 'ראשי', true),
+    ...cls.topics.map((t, i) => btn(t.id, `${i + 1}. ${t.label}`, false))
+  ].join('');
+}
+
+// ============================================================
+// PAGE SWITCHING (shared by every lesson)
+// Shows one <div class="page"> and syncs the subnav's active button.
+// ============================================================
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById(id);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('#classSubnav .nav-btn').forEach(b => b.classList.toggle('active', b.dataset.page === id));
+  window.scrollTo(0, 0);
+  // A chart created while its tab was display:none renders into a 0-size
+  // canvas. Chart.js v4 self-heals via ResizeObserver, but nudging it here
+  // avoids any first-paint flicker when the tab becomes visible.
+  if (typeof Chart !== 'undefined') {
+    setTimeout(() => Object.values(Chart.instances).forEach(c => { c.resize(); c.update(); }), 50);
+  }
+}
+
+// ============================================================
+// SHARED MATH: simple least-squares linear regression.
+// Returns { slope, intercept } for y = slope·x + intercept.
+// ============================================================
+function linreg(xs, ys) {
+  const n = xs.length;
+  const mx = xs.reduce((a, b) => a + b, 0) / n;
+  const my = ys.reduce((a, b) => a + b, 0) / n;
+  let sxy = 0, sxx = 0;
+  for (let i = 0; i < n; i++) { sxy += (xs[i] - mx) * (ys[i] - my); sxx += (xs[i] - mx) ** 2; }
+  const slope = sxy / sxx;
+  return { slope, intercept: my - slope * mx };
+}
+
+// ============================================================
+// SHARED CHART FACTORY
+// makeChart(canvasId, config) destroys any prior chart on that canvas,
+// applies the site-wide responsive/RTL defaults, and returns the chart.
+// Charts are tracked by canvas id, so callers no longer keep handles.
+// ============================================================
+if (typeof Chart !== 'undefined') {
+  Chart.defaults.font.family = 'Heebo';
+}
+const _charts = {};
+function makeChart(canvasId, config) {
+  if (_charts[canvasId]) _charts[canvasId].destroy();
+  config.options = config.options || {};
+  if (config.options.responsive === undefined) config.options.responsive = true;
+  if (config.options.maintainAspectRatio === undefined) config.options.maintainAspectRatio = false;
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  _charts[canvasId] = new Chart(ctx, config);
+  return _charts[canvasId];
+}
+function destroyChart(canvasId) {
+  if (_charts[canvasId]) { _charts[canvasId].destroy(); delete _charts[canvasId]; }
 }
 
 // ============================================================

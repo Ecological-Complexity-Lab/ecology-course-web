@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שיעור 1: גידול אוכלוסייה — אקולוגיה אינטראקטיבית</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Heebo:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+</head>
+<body>
+
+<nav id="siteNav" class="nav"></nav>
+
+<nav id="classSubnav" class="nav subnav"></nav>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <div class="hero anim">
+    <div class="lesson-kicker">שיעור 1</div>
+    <h1>איך <em>אוכלוסיות</em> גדלות בטבע?</h1>
+  </div>
+  <div class="info-box teal">
+    <strong>הגדרה:</strong> <em>אוכלוסייה</em> היא קבוצה של פרטים מאותו המין הנמצאים בשטח נתון.
+  </div>
+  <div class="topic-grid">
+    <div class="topic-card t1" onclick="showPage('p1')"><div class="topic-num">נושא 1</div><h3>גידול אקספוננציאלי</h3><p>מודל גידול בלתי מוגבל, Nt = N0·e^(rt), ודוגמאות אמיתיות</p></div>
+    <div class="topic-card t2" onclick="showPage('p2')"><div class="topic-num">נושא 2</div><h3>הערכת r מנתונים</h3><p>טרנספורמציית ln והפיכת עקומה לקו ישר כדי לחשב את r</p></div>
+    <div class="topic-card t3" onclick="showPage('p3')"><div class="topic-num">נושא 3</div><h3>גידול לוגיסטי ו-K</h3><p>משאבים מוגבלים, כושר נשיאה K ותהליך תלוי-צפיפות</p></div>
+    <div class="topic-card t4" onclick="showPage('p4')"><div class="topic-num">נושא 4</div><h3>תחזית, Allee ותרגול</h3><p>נצפה מול צפוי, חריגה מ-K, אפקט Allee ומקרה הפרא האסייתי</p></div>
+  </div>
+</div>
+
+<!-- TOPIC 1: EXPONENTIAL GROWTH -->
+<div id="p1" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot teal">📈</div>
+    <div><div class="sec-title">גידול אקספוננציאלי</div><div class="sec-sub">גידול בלתי מוגבל — Nt = N0·e^(rt)</div></div>
+  </div>
+  <div class="info-box teal">אוכלוסיות בטבע גדלות מדור לדור באופן אקספוננציאלי כאשר המשאבים העומדים לרשותן <strong>אינם מוגבלים</strong>. קצב הגידול תלוי בהפרש בין ילודה (B) לתמותה (D) — ובאוכלוסייה סגורה, ללא הגירה (I) ויציאה (E), מתקבל <strong>r = b − d</strong>.</div>
+
+  <div class="card">
+    <h4>הנחות מודל הגידול האקספוננציאלי</h4>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
+      <div class="info-box teal" style="margin:0">1. אין הגבלת משאבים</div>
+      <div class="info-box teal" style="margin:0">2. אוכלוסייה סגורה (ללא הגירה)</div>
+      <div class="info-box teal" style="margin:0">3. סביבה קבועה ואינה משתנה</div>
+      <div class="info-box teal" style="margin:0">4. כל הפרטים באוכלוסייה זהים</div>
+    </div>
+    <div class="formula">dNt/dt = r · Nt        <span class="comment"># קצב גידול האוכלוסייה</span>
+r = b − d              <span class="comment"># ילודה פחות תמותה</span>
+
+לאחר אינטגרציה:
+Nt = N0 · e^(r·t)      <span class="comment"># N0 = גודל התחלתי, Nt = גודל בזמן t</span></div>
+  </div>
+
+  <div class="card">
+    <h4>סימולטור גידול אקספוננציאלי</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">שנו את גודל האוכלוסייה ההתחלתי, את קצב הגידול r ואת טווח הזמן, וצפו בעקומת הגידול.</p>
+
+    <div class="control-row"><label>N₀ (גודל התחלתי)</label><input type="range" id="expN0" min="1" max="200" value="30" oninput="updateExp()"><span class="val-badge" id="expN0val">30</span></div>
+    <div class="control-row"><label>r (קצב גידול)</label><input type="range" id="expR" min="-30" max="50" value="4" oninput="updateExp()"><span class="val-badge" id="expRval" style="color:var(--teal)">0.04</span></div>
+    <div class="control-row"><label>t (מספר שנים/דורות)</label><input type="range" id="expT" min="1" max="40" value="10" oninput="updateExp()"><span class="val-badge" id="expTval">10</span></div>
+
+    <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;flex-direction:row-reverse;">
+      <button class="btn" onclick="loadExpPreset(30,4,10)">🐐 טען דוגמה: צבי השיטים</button>
+      <button class="btn secondary" onclick="loadExpPreset(26,15,30)">🦌 טען דוגמה: איילי הצפון באלסקה</button>
+    </div>
+
+    <div class="chart-wrap">
+      <canvas id="expChart" role="img" aria-label="עקומת גידול אקספוננציאלי"></canvas>
+    </div>
+
+    <div class="formula" id="expCalc" style="margin-top:1rem;"></div>
+    <div class="explain" id="expExplain"></div>
+  </div>
+
+  <div class="card">
+    <h4>דוגמאות מהעולם האמיתי</h4>
+    <div class="info-box teal" style="margin-bottom:.6rem;"><strong>צבי השיטים (Acacia gazelle):</strong> מין בסכנת הכחדה חמורה. רשות הטבע והגנים העבירה את האוכלוסייה האחרונה — <strong>30 פרטים</strong> — לשמורה גדורה בחי-בר יטבתה. מחקר באוכלוסייה בסעודיה מצא <strong>r = 0.04</strong>. בהנחת גידול בלתי מוגבל, בעוד 10 שנים: Nt = 30·e^(0.04×10) ≈ <strong>45</strong> פרטים.</div>
+    <div class="info-box amber" style="margin:0"><strong>איילי הצפון (reindeer) באלסקה:</strong> ב-1910 שוחררו 4 זכרים ו-22 נקבות (26 פרטים). בסביבה ללא טורפים ומתחרים משמעותיים, תוך 30 שנה הגיעה האוכלוסייה לכ-2000 פרטים — הדגמה קלאסית לגידול אקספוננציאלי בסביבה כמעט בלתי-מוגבלת.</div>
+  </div>
+</div>
+
+<!-- TOPIC 2: LN LINEARIZATION / ESTIMATING r -->
+<div id="p2" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot amber">📐</div>
+    <div><div class="sec-title">הערכת קצב הגידול r מנתונים</div><div class="sec-sub">טרנספורמציית ln — הופכים עקומה לקו ישר</div></div>
+  </div>
+  <div class="info-box amber">עקומת גידול אקספוננציאלי אינה קו ישר, ולכן אי אפשר "לקרוא" ממנה את r ישירות. לוקחים לוגריתם טבעי משני האגפים של המשוואה, ומקבלים משוואת קו ישר — <strong>שיפוע הקו הוא r</strong>.</div>
+
+  <div class="card">
+    <div class="formula">Nt = N0 · e^(r·t)                <span class="comment"># המשוואה המקורית</span>
+ln(Nt) = ln(N0) + r·t            <span class="comment"># טרנספורמציה לינארית</span>
+
+<span style="color:#fac775">שיפוע הקו = r</span>              <span class="comment"># חותך = ln(N0)</span></div>
+  </div>
+
+  <div class="card">
+    <h4>נתוני אמת מהתרגיל: שלוש אוכלוסיות של Dacus didactus</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">שלוש אוכלוסיות נבדלות בגודל ההתחלתי ובקצב הרבייה, אך אינן מוגבלות במשאבים ("גידול בלתי מוגבל"). הנתונים למטה הם הנתונים האמיתיים מהתרגיל.</p>
+
+    <div style="overflow-x:auto;">
+      <table class="mini-table" id="pop123Table"></table>
+    </div>
+
+    <div style="margin-top:1rem;">
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;text-align:right;">גרף 1 — גודל האוכלוסייה הגולמי מול דור (עם קו מגמה אקספוננציאלי)</div>
+      <div class="chart-wrap"><canvas id="rawChart" role="img" aria-label="גודל אוכלוסייה גולמי מול דור"></canvas></div>
+    </div>
+
+    <div style="margin-top:1.25rem;">
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;text-align:right;">גרף 2 — לאחר טרנספורמציה: ln(N) מול דור (עם קו מגמה לינארי)</div>
+      <div class="chart-wrap"><canvas id="lnChart" role="img" aria-label="ln אוכלוסייה מול דור"></canvas></div>
+    </div>
+
+    <div style="margin-top:1rem;">
+      <table class="comp-table">
+        <thead><tr><th>אוכלוסייה</th><th>r (שיפוע)</th><th>מגמה</th></tr></thead>
+        <tbody id="rTableBody"></tbody>
+      </table>
+    </div>
+    <div class="explain" id="rExplain"></div>
+  </div>
+
+  <div class="card">
+    <h4>שאלות הבנה מהתרגיל</h4>
+    <div class="explain"><strong>מה מייצג קו המגמה, ומדוע אינו עובר בדיוק על הנקודות?</strong> קו המגמה הוא מודל המתאר את הדפוס הכללי של הנתונים כך שממזער את השגיאה הכוללת על פני כל מערך הנתונים. הוא אינו כולל רעש סטוכסטי, קשרים לא-לינאריים או חריגים בודדים — ולכן לא עובר בדיוק דרך כל נקודה.</div>
+    <div class="explain"><strong>האם ניתן לחזות את עתיד האוכלוסייה רק לפי הסימן של r?</strong> כן: האוכלוסייה גדלה כאשר r&gt;0, קטנה כאשר r&lt;0, ונשארת יציבה כאשר r≈0 — כפי שרואים באוכלוסייה 3 בטבלה למעלה.</div>
+  </div>
+</div>
+
+<!-- TOPIC 3: LOGISTIC GROWTH & CARRYING CAPACITY -->
+<div id="p3" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot purple">🌱</div>
+    <div><div class="sec-title">גידול לוגיסטי וכושר נשיאה (K)</div><div class="sec-sub">משאבים מוגבלים — תהליך תלוי-צפיפות</div></div>
+  </div>
+  <div class="info-box purple">בפועל, כל אוכלוסייה בטבע תוגבל בשלב מסוים על ידי המשאבים הדרושים לקיומה. <strong>כושר הנשיאה (K)</strong> הוא גודל האוכלוסייה המקסימלי שבו קצב הילודה שווה לקצב התמותה. הוספת הגבלת המשאבים הופכת את הגידול לתהליך <strong>תלוי-צפיפות</strong> — קצב הגידול הרגעי לפרט (r) אינו קבוע, אלא קטן ככל שהאוכלוסייה גדלה וממשאבים.</div>
+
+  <div class="card">
+    <div class="formula">dN/dt = r · Nt · (K − Nt)/K       <span class="comment"># קצב גידול תלוי-צפיפות</span>
+
+לאחר אינטגרציה:
+Nt = K / (1 + ((K − N0)/N0)·e^(−r·t))
+
+טרנספורמציה לינארית:
+ln((K − Nt)/Nt) = ln((K − N0)/N0) − r·t   <span class="comment"># שיפוע = −r</span></div>
+  </div>
+
+  <div class="card">
+    <h4>מציאת כושר הנשיאה מנתוני אמת — אוכלוסייה 4</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">אוכלוסייה 4 מוגבלת במשאבים ונדגמה לאורך 22 דורות. כאשר האוכלוסייה מתייצבת (עולה ויורדת מעט סביב ערך קבוע), הגענו לכושר הנשיאה שלה.</p>
+    <div style="overflow-x:auto;">
+      <table class="mini-table" id="pop4Table"></table>
+    </div>
+    <div class="formula" id="kCalc" style="margin-top:1rem;"></div>
+  </div>
+
+  <div class="card">
+    <h4>הערכת קצב הגידול r מהטרנספורמציה הלינארית</h4>
+    <div class="chart-wrap"><canvas id="logLinChart" role="img" aria-label="טרנספורמציה לוגיסטית לינארית"></canvas></div>
+    <div class="explain" id="logLinExplain"></div>
+  </div>
+
+  <div class="card">
+    <h4>סימולטור גידול לוגיסטי</h4>
+    <div class="control-row"><label>N₀ (גודל התחלתי)</label><input type="range" id="logN0" min="1" max="100" value="30" oninput="updateLogistic()"><span class="val-badge" id="logN0val">30</span></div>
+    <div class="control-row"><label>K (כושר נשיאה)</label><input type="range" id="logK" min="10" max="250" value="60" oninput="updateLogistic()"><span class="val-badge" id="logKval">60</span></div>
+    <div class="control-row"><label>r (קצב גידול)</label><input type="range" id="logR" min="1" max="80" value="4" oninput="updateLogistic()"><span class="val-badge" id="logRval" style="color:var(--purple)">0.04</span></div>
+    <div class="control-row"><label>t (טווח זמן)</label><input type="range" id="logT" min="5" max="60" value="20" oninput="updateLogistic()"><span class="val-badge" id="logTval">20</span></div>
+
+    <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;flex-direction:row-reverse;">
+      <button class="btn" onclick="loadLogPreset(30,60,4,20)">🐐 טען דוגמה: צבי השיטים (לוגיסטי)</button>
+      <button class="btn secondary" onclick="loadLogPresetFromPop4()">🔬 טען פרמטרים מאוכלוסייה 4</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;text-align:right;">Nt לאורך זמן (מתייצב ב-K)</div>
+        <div class="chart-wrap" style="height:240px;"><canvas id="simChart" role="img" aria-label="גידול לוגיסטי לאורך זמן"></canvas></div>
+      </div>
+      <div>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;text-align:right;">קצב הגידול dN/dt מול גודל האוכלוסייה N</div>
+        <div class="chart-wrap" style="height:240px;"><canvas id="ddChart" role="img" aria-label="תלות צפיפות"></canvas></div>
+      </div>
+    </div>
+    <div class="formula" id="logCalc" style="margin-top:1rem;"></div>
+    <div class="explain" id="logExplain"></div>
+  </div>
+</div>
+
+<!-- TOPIC 4: OBSERVED VS EXPECTED, ALLEE, DONKEY CASE -->
+<div id="p4" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot coral">🔮</div>
+    <div><div class="sec-title">תחזית מול תצפית, אפקט Allee ותרגול נוסף</div><div class="sec-sub">האם המודל הלוגיסטי מדויק? ומה קורה כשגדלים "יותר מדי"?</div></div>
+  </div>
+  <div class="info-box coral">עכשיו, כשיש לנו K ו-r של אוכלוסייה 4, אפשר לבדוק עד כמה המודל הלוגיסטי מנבא נכון את הגודל האמיתי (הנצפה) של האוכלוסייה לאורך 22 הדורות שנמדדו בפועל.</div>
+
+  <div class="card">
+    <h4>נצפה מול צפוי — אוכלוסייה 4</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">Observed = הנתונים האמיתיים שנמדדו. Expected = החיזוי לפי המודל הלוגיסטי, בעזרת K = 200, r = 0.4532 ו-N0 = 3 (הערכים המדויקים מפתרון התרגיל).</p>
+    <div class="chart-wrap"><canvas id="ovsExpChart" role="img" aria-label="נצפה מול צפוי"></canvas></div>
+    <div class="explain"><strong>האם הגודל הצפוי (Expected) יכול לעבור את כושר הנשיאה?</strong> לא — לפי המודל הלוגיסטי קצב הגידול בדיוק ב-K הוא אפס, ולכן מבחינה מתמטית האוכלוסייה הצפויה אף פעם לא חוצה את K, רק מתקרבת אליו אסימפטוטית.</div>
+    <div class="explain"><strong>אבל בטבע?</strong> אוכלוסיות אמיתיות כן יכולות לחרוג מ-K (overshoot) — למשל בגלל עיכוב (lag) בתגובת האוכלוסייה לשינוי במשאבים. כאשר זה קורה, קצב הגידול הופך שלילי והאוכלוסייה קטנה בחזרה לעבר K.</div>
+  </div>
+
+  <div class="card">
+    <h4>מקרה נוסף: השבת הפרא האסייתי לטבע</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">ב-1995 הושבו לטבע <strong>37 פרטים</strong> של הפרא האסייתי. נמצא כי קצב הרבייה הרגעי לפרט הוא <strong>r = 0.22</strong>, וכי הגורם המגביל העיקרי הוא מקורות מים. שנו את מספר מקורות המים והקיבולת הממוצעת של כל מקור כדי לחשב את K ולראות כיצד האוכלוסייה צפויה להתפתח.</p>
+
+    <div class="control-row"><label>מספר מקורות מים</label><input type="range" id="donkeySrc" min="5" max="50" value="25" oninput="updateDonkey()"><span class="val-badge" id="donkeySrcVal">25</span></div>
+    <div class="control-row"><label>פרטים למקור (בממוצע)</label><input type="range" id="donkeyCap" min="5" max="50" value="25" oninput="updateDonkey()"><span class="val-badge" id="donkeyCapVal">25</span></div>
+    <div class="control-row"><label>שנים מאז 1995</label><input type="range" id="donkeyT" min="1" max="60" value="30" oninput="updateDonkey()"><span class="val-badge" id="donkeyTVal">30</span></div>
+
+    <div class="chart-wrap"><canvas id="donkeyChart" role="img" aria-label="תחזית אוכלוסיית הפרא האסייתי"></canvas></div>
+    <div class="formula" id="donkeyCalc" style="margin-top:1rem;"></div>
+    <div class="explain" id="donkeyExplain"></div>
+  </div>
+
+  <div class="card">
+    <h4>אפקט Allee — כשצפיפות גבוהה יותר עוזרת, לא מזיקה</h4>
+    <div class="info-box coral">ברוב המקרים, ככל שהאוכלוסייה גדלה, קצב הגידול לפרט קטן (תחרות על משאבים). אבל לפעמים קורה ההפך: <strong>ב-Allee Effect</strong> קצב הגידול עולה כאשר האוכלוסייה גדלה — בעיקר באוכלוסיות קטנות. דוגמה: קושי במציאת בן/בת זוג, או צורך בציד קבוצתי.</div>
+    <div class="control-row"><label>עוצמת אפקט Allee (סף A)</label><input type="range" id="alleeA" min="0" max="40" value="15" oninput="updateAllee()"><span class="val-badge" id="alleeAVal">15</span></div>
+    <div class="chart-wrap"><canvas id="alleeChart" role="img" aria-label="אפקט Allee"></canvas></div>
+    <div class="explain" id="alleeExplain"></div>
+  </div>
+
+  <div class="card">
+    <h4>בדקו את עצמכם</h4>
+    <div id="quizBox"></div>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/class-1-population-growth.js"></script>
+</body>
+</html>

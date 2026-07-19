@@ -13,13 +13,7 @@
 
 <nav id="siteNav" class="nav"></nav>
 
-<nav id="classSubnav" class="nav subnav">
-  <button class="nav-btn active" data-page="home" onclick="showPage('home')">ראשי</button>
-  <button class="nav-btn" data-page="p1" onclick="showPage('p1')">1. תיאור חברה</button>
-  <button class="nav-btn" data-page="p2" onclick="showPage('p2')">2. עקומת צבירה</button>
-  <button class="nav-btn" data-page="p3" onclick="showPage('p3')">3. מגוון α β γ</button>
-  <button class="nav-btn" data-page="p4" onclick="showPage('p4')">4. שטח–מינים</button>
-</nav>
+<nav id="classSubnav" class="nav subnav"></nav>
 
 <!-- HOME -->
 <div id="home" class="page active">
@@ -34,7 +28,7 @@
     <div class="topic-card t1" onclick="showPage('p1')"><div class="topic-num">נושא 1</div><h3>תיאור חברה</h3><p>עושר מינים, שפע, שפע יחסי, מדד שאנון ושוויון</p></div>
     <div class="topic-card t2" onclick="showPage('p2')"><div class="topic-num">נושא 2</div><h3>עקומת צבירת מינים</h3><p>כיצד הדגימה חושפת עושר מינים — ומדוע סטוכסטיות חשובה</p></div>
     <div class="topic-card t3" onclick="showPage('p3')"><div class="topic-num">נושא 3</div><h3>מגוון α, β ו-γ</h3><p>עושר לוקאלי, עושר אזורי, ומדד ג'קארד לדמיון בין חברות</p></div>
-    <div class="topic-card t4" onclick="showPage('p4')"><div class="topic-num">נושא 4</div><h3>הקשר שטח–מינים</h3><p>מדוע שטחים גדולים מכילים יותר מינים — וחוק החזקה מאחורי זה</p></div>
+    <div class="topic-card t4" onclick="showPage('p4')"><div class="topic-num">נושא 4</div><h3>הקשר שטח–מינים</h3><p>מדוע שטחים גדולים מכילים יותר מינים</p></div>
   </div>
 </div>
 
@@ -64,12 +58,12 @@
 
     <div class="comm-side" style="margin-top:.5rem;">
       <div>
-        <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;text-align:right;">ויזואליזציה — חברה א'</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;text-align:right;">חברה א'</div>
         <div id="dotsA" class="habitat-grid"></div>
         <div class="metrics-row" id="metricsA" style="margin-top:.5rem;"></div>
       </div>
       <div>
-        <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;text-align:right;">ויזואליזציה — חברה ב'</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;text-align:right;">חברה ב'</div>
         <div id="dotsB" class="habitat-grid"></div>
         <div class="metrics-row" id="metricsB" style="margin-top:.5rem;"></div>
       </div>

@@ -1,12 +1,4 @@
-// ============================================================
-// WITHIN-LESSON TOPIC NAV (subnav)
-// ============================================================
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('#classSubnav .nav-btn').forEach(b => b.classList.toggle('active', b.dataset.page === id));
-  window.scrollTo(0, 0);
-}
+// showPage(), linreg() and makeChart() are shared — see js/common.js.
 
 // ============================================================
 // TOPIC 1: COMMUNITY METRICS
@@ -60,10 +52,6 @@ function renderDots(container, vals) {
   Object.entries(vals).forEach(([sp, n]) => {
     for (let i=0; i<n; i++) pool.push(sp);
   });
-  for (let i=pool.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [pool[i],pool[j]]=[pool[j],pool[i]];
-  }
   pool.forEach(sp => {
     const d = document.createElement('div');
     d.className = 'h-dot';
@@ -122,7 +110,7 @@ function renderCompare() {
 // ============================================================
 // TOPIC 2: ACCUMULATION CURVE
 // ============================================================
-let accumChart=null, accumRuns=[];
+let accumRuns=[];
 
 function getAccumParams() {
   return {
@@ -205,9 +193,7 @@ function renderAccumChart() {
   const maxN = Math.max(...accumRuns.map(r => r.N));
   const maxS = Math.max(...accumRuns.map(r => r.S));
 
-  if(accumChart) accumChart.destroy();
-  const ctx=document.getElementById('accumChart').getContext('2d');
-  accumChart=new Chart(ctx,{
+  makeChart('accumChart',{
     type:'line',data:{datasets},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:accumRuns.length>1,labels:{font:{family:'Heebo',size:11},boxWidth:12,padding:8}}},
@@ -232,7 +218,7 @@ function renderAccumChart() {
 
 function clearAccum(){
   accumRuns=[];
-  if(accumChart){accumChart.destroy();accumChart=null;}
+  destroyChart('accumChart');
   document.getElementById('accumExplain').innerHTML='לחצו על <strong>דגום פעם אחת</strong> כדי ליצור עקומה.';
   document.getElementById('accumDots').innerHTML='';
   document.getElementById('accumMetrics').innerHTML='';
@@ -374,7 +360,7 @@ const SIPOO = [
   ['Kallbadagrund',0.8,11],['Emsalo',1.2,12],['Pellinki',2.1,14],
   ['Sarvsalo',3.5,15],['Bodo',6.0,17],['Bodo main',12.0,19]
 ];
-let sarChart=null, sarLogMode=false;
+let sarLogMode=false;
 
 function computeSAR(area,c,z){return c*Math.pow(area,z);}
 
@@ -387,12 +373,9 @@ function updateSAR(){
 }
 
 function fitSAR(){
-  const pts=SIPOO.map(([,a,s])=>[Math.log(a),Math.log(s)]);
-  const n=pts.length;
-  const mx=pts.reduce((s,[x])=>s+x,0)/n;
-  const my=pts.reduce((s,[,y])=>s+y,0)/n;
-  const z=pts.reduce((s,[x,y])=>s+(x-mx)*(y-my),0)/pts.reduce((s,[x])=>s+(x-mx)**2,0);
-  const c=Math.exp(my-z*mx);
+  // log-log linearization: ln(SPP) = ln(a) + Z·ln(A), so Z = slope, a = e^intercept.
+  const { slope: z, intercept } = linreg(SIPOO.map(([,a])=>Math.log(a)), SIPOO.map(([,,s])=>Math.log(s)));
+  const c=Math.exp(intercept);
   document.getElementById('sarZ').value=Math.min(0.65,Math.max(0.05,z)).toFixed(2);
   document.getElementById('sarC').value=Math.min(5,Math.max(0.5,c)).toFixed(1);
   updateSAR();
@@ -408,9 +391,7 @@ function renderSAR(z,c){
     :Array.from({length:50},(_,i)=>0.005+i*11.995/49);
   const lineY=lineX.map(x=>sarLogMode?Math.log(c)+z*x:computeSAR(x,c,z));
 
-  if(sarChart) sarChart.destroy();
-  const ctx=document.getElementById('sarChart').getContext('2d');
-  sarChart=new Chart(ctx,{
+  makeChart('sarChart',{
     type:'scatter',
     data:{datasets:[
       {label:'איים',data:scatter,backgroundColor:'#0f6e5699',pointRadius:6,pointHoverRadius:8,type:'scatter'},
@@ -431,6 +412,7 @@ function renderSAR(z,c){
 // PAGE INIT
 // ============================================================
 renderSiteNav();
+renderSubnav();
 buildSliders(document.getElementById('slidersA'), commAvals, 'A');
 buildSliders(document.getElementById('slidersB'), commBvals, 'B');
 renderComm('A'); renderComm('B'); renderCompare();
