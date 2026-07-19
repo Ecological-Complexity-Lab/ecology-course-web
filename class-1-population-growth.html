@@ -97,7 +97,7 @@ ln(Nt) = ln(N0) + r·t            <span class="comment"># טרנספורמציה
   </div>
 
   <div class="card">
-    <h4>נתוני אמת מהתרגיל: שלוש אוכלוסיות של Dacus didactus</h4>
+    <h4>נתונים מהתרגיל: שלוש אוכלוסיות של Dacus didactus</h4>
     <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">שלוש אוכלוסיות נבדלות בגודל ההתחלתי ובקצב הרבייה, אך אינן מוגבלות במשאבים ("גידול בלתי מוגבל"). הנתונים למטה הם הנתונים האמיתיים מהתרגיל.</p>
 
     <div style="overflow-x:auto;">
@@ -137,6 +137,18 @@ ln(Nt) = ln(N0) + r·t            <span class="comment"># טרנספורמציה
     <div><div class="sec-title">גידול לוגיסטי וכושר נשיאה (K)</div><div class="sec-sub">משאבים מוגבלים — תהליך תלוי-צפיפות</div></div>
   </div>
   <div class="info-box purple">בפועל, כל אוכלוסייה בטבע תוגבל בשלב מסוים על ידי המשאבים הדרושים לקיומה. <strong>כושר הנשיאה (K)</strong> הוא גודל האוכלוסייה המקסימלי שבו קצב הילודה שווה לקצב התמותה. הוספת הגבלת המשאבים הופכת את הגידול לתהליך <strong>תלוי-צפיפות</strong> — קצב הגידול הרגעי לפרט (r) אינו קבוע, אלא קטן ככל שהאוכלוסייה גדלה וממשאבים.</div>
+
+  <div class="card">
+    <h4>הנחות מודל הגידול הלוגיסטי</h4>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
+      <div class="info-box purple" style="margin:0;text-decoration:line-through;opacity:.55">1. אין הגבלת משאבים</div>
+      <div class="info-box purple" style="margin:0">2. אוכלוסייה סגורה (ללא הגירה)</div>
+      <div class="info-box purple" style="margin:0">3. סביבה קבועה ואינה משתנה</div>
+      <div class="info-box purple" style="margin:0">4. כל הפרטים באוכלוסייה זהים</div>
+      <div class="info-box purple" style="margin:0">5. קצב הגידול הרגעי לפרט (r) תלוי לינארית בגודל האוכלוסייה</div>
+    </div>
+    <div class="explain">בניגוד למודל האקספוננציאלי, כאן <strong>אין</strong> הנחה של משאבים בלתי מוגבלים (הנחה 1 אינה תקפה) — זו בדיוק הנקודה שהופכת את הגידול לתלוי-צפיפות. ההנחה המייחדת את המודל הלוגיסטי היא הנחה 5: ככל שהאוכלוסייה גדלה, קצב הגידול הרגעי לפרט (r) קטן באופן לינארי, עד שהוא מתאפס בכושר הנשיאה (K).</div>
+  </div>
 
   <div class="card">
     <div class="formula">dN/dt = r · Nt · (K − Nt)/K       <span class="comment"># קצב גידול תלוי-צפיפות</span>
