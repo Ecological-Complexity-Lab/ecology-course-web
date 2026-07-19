@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שיעור 2: מבנה חברה — אקולוגיה אינטראקטיבית</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Heebo:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+</head>
+<body>
+
+<nav id="siteNav" class="nav"></nav>
+
+<nav id="classSubnav" class="nav subnav">
+  <button class="nav-btn active" data-page="home" onclick="showPage('home')">ראשי</button>
+  <button class="nav-btn" data-page="p1" onclick="showPage('p1')">1. תיאור חברה</button>
+  <button class="nav-btn" data-page="p2" onclick="showPage('p2')">2. עקומת צבירה</button>
+  <button class="nav-btn" data-page="p3" onclick="showPage('p3')">3. מגוון α β γ</button>
+  <button class="nav-btn" data-page="p4" onclick="showPage('p4')">4. שטח–מינים</button>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <div class="hero anim">
+    <div class="lesson-kicker">שיעור 2</div>
+    <h1>מה מעצב <em>חברה</em> אקולוגית?</h1>
+  </div>
+  <div class="info-box teal">
+    <strong>הגדרה:</strong> <em>חברה</em> היא אוסף של אוכלוסיות הנמצאות יחד באותו מקום ובאותו זמן.
+  </div>
+  <div class="topic-grid">
+    <div class="topic-card t1" onclick="showPage('p1')"><div class="topic-num">נושא 1</div><h3>תיאור חברה</h3><p>עושר מינים, שפע, שפע יחסי, מדד שאנון ושוויון</p></div>
+    <div class="topic-card t2" onclick="showPage('p2')"><div class="topic-num">נושא 2</div><h3>עקומת צבירת מינים</h3><p>כיצד הדגימה חושפת עושר מינים — ומדוע סטוכסטיות חשובה</p></div>
+    <div class="topic-card t3" onclick="showPage('p3')"><div class="topic-num">נושא 3</div><h3>מגוון α, β ו-γ</h3><p>עושר לוקאלי, עושר אזורי, ומדד ג'קארד לדמיון בין חברות</p></div>
+    <div class="topic-card t4" onclick="showPage('p4')"><div class="topic-num">נושא 4</div><h3>הקשר שטח–מינים</h3><p>מדוע שטחים גדולים מכילים יותר מינים — וחוק החזקה מאחורי זה</p></div>
+  </div>
+</div>
+
+<!-- TOPIC 1 -->
+<div id="p1" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot teal">🔢</div>
+    <div><div class="sec-title">תיאור חברה</div><div class="sec-sub">עושר · שפע · שאנון H · שוויון J</div></div>
+  </div>
+
+  <div class="info-box teal">ניתן לאפיין כל חברה בשלושה מדדים מרכזיים. שנו את ערכי המחוון וצפו כיצד המדדים משתנים בשתי החברות בו-זמנית.</div>
+
+  <div class="card">
+    <h4>דוגמה:</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">שנו את שפע המינים בשתי החברות. תראו את השפעת השינויים על המדדים.</p>
+
+    <div class="comm-side">
+      <div class="comm-panel">
+        <h5><span class="badge" style="background:var(--teal)"></span> חברה א'</h5>
+        <div id="slidersA"></div>
+      </div>
+      <div class="comm-panel">
+        <h5><span class="badge" style="background:var(--purple)"></span> חברה ב'</h5>
+        <div id="slidersB"></div>
+      </div>
+    </div>
+
+    <div class="comm-side" style="margin-top:.5rem;">
+      <div>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;text-align:right;">ויזואליזציה — חברה א'</div>
+        <div id="dotsA" class="habitat-grid"></div>
+        <div class="metrics-row" id="metricsA" style="margin-top:.5rem;"></div>
+      </div>
+      <div>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;text-align:right;">ויזואליזציה — חברה ב'</div>
+        <div id="dotsB" class="habitat-grid"></div>
+        <div class="metrics-row" id="metricsB" style="margin-top:.5rem;"></div>
+      </div>
+    </div>
+    <div class="explain" style="margin-top:.5rem;">כל נקודה מייצגת פרט אחד, במיקום אקראי בתוך בית הגידול — בדיוק כמו דגימה אקראית בשטח. השפע היחסי של כל מין נשאר קבוע, אך הסידור המרחבי משתנה בכל דגימה.</div>
+
+    <div class="comm-side" style="margin-top:.75rem;">
+      <div class="formula" style="font-size:.75rem;margin:0;" id="calcA"></div>
+      <div class="formula" style="font-size:.75rem;margin:0;" id="calcB"></div>
+    </div>
+
+    <div style="margin-top:1rem;">
+      <table class="comp-table">
+        <thead><tr><th>מדד</th><th>חברה א'</th><th>חברה ב'</th><th>מגוונת יותר?</th></tr></thead>
+        <tbody id="compareBody"></tbody>
+      </table>
+      <div class="explain" id="compareExplain"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>חישוב מדד מגוון:</h4>
+    <div class="formula">S  = מספר המינים          <span class="comment"># עושר מינים</span>
+nᵢ = שפע מין i
+pᵢ = nᵢ / N             <span class="comment"># שפע יחסי</span>
+
+<span style="color:#fac775">שאנון H = −∑ pᵢ · ln(pᵢ)</span>  <span class="comment"># מדד מגוון</span>
+<span style="color:#9fe1cb">שוויון J = H / ln(S)</span>   <span class="comment"># 0 (לא שווה) → 1 (שוויון מלא)</span></div>
+    <div class="explain"><strong> מדד שאנון H</strong> הוא מדד שלוקח בחשבון גם את השפע היחסי של כל מין בחברה וגם את השיוויון של המינים השונים בחברה – כמה החברה הומוגנית (כל המינים בעלי שפע יחסי דומה) או הטרוגנית (לכל מין יש שפע יחסי שונה). מדד השיוון של שאנון מחושב כפרופורציה בין ערך מגוון השאנון שקיבלנו לבין ערך מגוון השאנון המקסימלי. ככל שהערך גדול יותר, החברה הומוגנית יותר (ערך השוויון עולה).  </div>
+  </div>
+</div>
+
+<!-- TOPIC 2 -->
+<div id="p2" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot amber"></div>
+    <div><div class="sec-title">עקומת צבירת מינים</div><div class="sec-sub">Species Accumulation Curve — דגימה, סטוכסטיות, זיהוי עושר</div></div>
+  </div>
+  <div class="info-box amber">Species accumulation curves הן עקומות שמראות את הקשר בין מספר הפרטים למספר המינים וניתן להוציא מהן מידע לגבי עושר המינים באיזור מסוים.
+המטרה של המודל היא לעזור לחוקר להחליט אם הוא דגם מספיק מהשטח הנתון. </div>
+
+  <div class="card">
+    <h4> סימולציה לבניית עקומת צבירת מינים:</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">קבעו עושר ושוויון, ולאחר מכן דגמו פרטים. הריצו מספר פעמים עם אותם ערכים כדי לראות את השפעת הסטוכסטיות, או שנו את הערכים לפני "הוסף הרצה" כדי להשוות עקומות עם פרמטרים שונים.</p>
+
+    <div class="control-row">
+      <label>עושר מינים (S)</label>
+      <input type="range" id="accumS" min="3" max="12" value="7" oninput="updateAccumLabels()">
+      <span class="val-badge" id="accumSval">7</span>
+    </div>
+    <div class="control-row">
+      <label>שוויון (J)</label>
+      <input type="range" id="accumE" min="1" max="100" value="50" oninput="updateAccumLabels()">
+      <span class="val-badge" id="accumEval" style="color:var(--amber)">0.50</span>
+    </div>
+    <div class="control-row">
+      <label>מספר פרטים (N)</label>
+      <input type="range" id="accumN" min="10" max="100" value="40" step="5" oninput="updateAccumLabels()">
+      <span class="val-badge" id="accumNval">40</span>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;flex-direction:row-reverse;">
+      <button class="btn" onclick="runAccum(false)">▶ דגום פעם אחת</button>
+      <button class="btn secondary" onclick="runAccum(true)">↻ הוסף הרצה עם הערכים הנוכחיים</button>
+      <button class="btn secondary" onclick="clearAccum()">✕ נקה</button>
+    </div>
+
+    <div class="chart-wrap">
+      <canvas id="accumChart" role="img" aria-label="עקומת צבירת מינים"></canvas>
+    </div>
+    <div class="explain" id="accumExplain">לחצו על <strong>דגום פעם אחת</strong> כדי ליצור עקומה. נסו ללחוץ מספר פעמים — שימו לב כיצד העקומה משתנה בכל פעם בגלל אקראיות (סטוכסטיות).</div>
+
+    <div style="margin-top:1rem;">
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;text-align:right;">הרכב החברה שממנה נדגם (הרצה אחרונה)</div>
+      <div id="accumDots" class="habitat-grid"></div>
+      <div class="metrics-row" id="accumMetrics" style="margin-top:.5rem;"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>מה משפיע על צורת העקומה?</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="info-box amber" style="margin:0"><strong>עושר גבוה יותר ←</strong> העקומה מגיעה לרמה גבוהה יותר</div>
+      <div class="info-box teal" style="margin:0"><strong>שוויון נמוך יותר ←</strong> העקומה עולה לאט יותר בהתחלה</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOPIC 3 -->
+<div id="p3" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot purple">🗺️</div>
+    <div><div class="sec-title">מגוון α, β ו-γ</div><div class="sec-sub">לוקאלי · בין-חברות · גלובאלי</div></div>
+  </div>
+  <div class="info-box purple">מגוון ביולוגי פועל בסקאלות מרחביות מרובות. אקולוגים מפרקים את המגוון האזורי (γ) למגוון מקומי (α) מדד דמיון בין שתי חברות (β).</div>
+
+  <div class="card">
+    <h4>שלוש הסקאלות</h4>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1rem;">
+      <div style="background:var(--teal-light);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:2rem;font-weight:700;color:var(--teal);font-family:'DM Mono',monospace;">α</div><div style="font-weight:600;font-size:.88rem;margin-bottom:.3rem">מגוון אלפא</div><div style="font-size:.78rem;color:var(--muted)">מדד לעושר המינים הלוקאלי בשטח נתון</div></div>
+      <div style="background:var(--purple-light);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:2rem;font-weight:700;color:var(--purple);font-family:'DM Mono',monospace;">β</div><div style="font-weight:600;font-size:.88rem;margin-bottom:.3rem">מגוון בטא</div><div style="font-size:.78rem;color:var(--muted)"> מדד לדמיון בין שתי חברות</div></div>
+      <div style="background:var(--amber-light);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:2rem;font-weight:700;color:var(--amber);font-family:'DM Mono',monospace;">γ</div><div style="font-weight:600;font-size:.88rem;margin-bottom:.3rem">מגוון גמא</div><div style="font-size:.78rem;color:var(--muted)">מדד לעושר המינים הגלובאלי</div></div>
+    </div>
+    <div class="formula">γ = סך המינים הייחודיים באזור
+α = עושר מינים באתר i
+β_Jaccard = a / (a + b + c)   <span class="comment"># 0–1</span>
+
+a = מינים משותפים
+b = ייחודיים לאתר ב'
+c = ייחודיים לאתר א'</div>
+  </div>
+
+  <div class="card">
+    <h4>דוגמה לחישוב ג'קארד:</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">לחצו על מינים כדי לשנות את נוכחותם בכל אתר. צפו כיצד דיאגרמת ון ומדד ג'קארד מתעדכנים.</p>
+
+    <div class="beta-grid">
+      <div class="site-box"><h5>אתר א'</h5><div class="species-chips" id="siteAchips"></div></div>
+      <div class="site-box"><h5>אתר ב'</h5><div class="species-chips" id="siteBchips"></div></div>
+    </div>
+
+    <div class="venn-area">
+      <svg id="vennSvg" width="480" height="240" viewBox="0 0 480 240" style="overflow:visible;max-width:100%;height:auto;">
+        <circle id="vCircleA" cx="180" cy="120" r="90" fill="rgba(15,110,86,0.15)" stroke="#0f6e56" stroke-width="2"/>
+        <circle id="vCircleB" cx="300" cy="120" r="90" fill="rgba(83,74,183,0.15)" stroke="#534ab7" stroke-width="2"/>
+        <g id="vAIcons"></g>
+        <text id="vAcount" x="130" y="145" text-anchor="middle" font-size="12" fill="#0f6e56" font-family="Heebo,sans-serif"></text>
+        <g id="vBIcons"></g>
+        <text id="vBcount" x="350" y="145" text-anchor="middle" font-size="12" fill="#534ab7" font-family="Heebo,sans-serif"></text>
+        <g id="vSharedIcons"></g>
+        <text id="vSharedCount" x="240" y="145" text-anchor="middle" font-size="12" fill="#1a1a16" font-family="Heebo,sans-serif"></text>
+        <text id="vALabel" x="130" y="222" text-anchor="middle" font-size="13" fill="#6b6b5e" font-family="Heebo,sans-serif">ייחודי לאתר א'</text>
+        <text id="vBLabel" x="350" y="222" text-anchor="middle" font-size="13" fill="#6b6b5e" font-family="Heebo,sans-serif">ייחודי לאתר ב'</text>
+        <text id="vSharedLabel" x="240" y="222" text-anchor="middle" font-size="13" fill="#6b6b5e" font-family="Heebo,sans-serif">משותף</text>
+      </svg>
+    </div>
+
+    <div class="metrics-row">
+      <div class="metric"><div class="m-label">α אתר א'</div><div class="m-val teal" id="alphaA">—</div></div>
+      <div class="metric"><div class="m-label">α אתר ב'</div><div class="m-val purple" id="alphaB">—</div></div>
+      <div class="metric"><div class="m-label">γ אזורי</div><div class="m-val amber" id="gammaAB">—</div></div>
+      <div class="metric"><div class="m-label">β ג'קארד</div><div class="m-val coral" id="betaJacc">—</div></div>
+    </div>
+    <div class="explain" id="betaExplain">בחרו מינים לכל אתר כדי לחשב את מדדי המגוון.</div>
+  </div>
+
+  <div class="card">
+    <h4>מדריך פרשנות</h4>
+    <table class="comp-table">
+      <thead><tr><th>ערך β ג'קארד</th><th>משמעות</th><th>פרשנות אקולוגית</th></tr></thead>
+      <tbody>
+        <tr><td><strong>= 1.0</strong></td><td>חברות זהות</td><td>אותו מאגר מינים, בתי גידול מחוברים</td></tr>
+        <tr><td><strong>0.5 – 1.0</strong></td><td>חברות דומות</td><td>מאגר מינים אזורי משותף עם שונות מקומית</td></tr>
+        <tr><td><strong>0.1 – 0.5</strong></td><td>תחלופה בינונית</td><td>הבדלי בית גידול, מגבלות פיזור מתונות</td></tr>
+        <tr><td><strong>≈ 0</strong></td><td>שונות מוחלטת</td><td>מחסומים חזקים, סוגי בית גידול שונים לחלוטין</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TOPIC 4 -->
+<div id="p4" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot coral">🏝️</div>
+    <div><div class="sec-title">הקשר שטח–מינים</div><div class="sec-sub">הקשר בין גודל השטח לעושר המינים</div></div>
+  </div>
+  <div class="info-box coral">שטחים גדולים יותר מכילים באופן עקבי יותר מינים. 
+שני גורמים אקולוגיים עיקריים לתופעה הזאת:
+בשטח יותר גדול נצפה למצוא יותר בתי גידול שונים. יותר בתי גידול שונים יכולים לתמוך ביותר מינים שונים הזקוקים לבתי גידול ונישות שונות.
+שטח יותר גדול יכול לתמוך באוכלוסיות גדולות יותר. בשטח גדול יותר האוכלוסיות של מינים נדירים (אוכלוסיות קטנות באופן יחסי) יהיו גדולות יותר. בהתאם למה שלמדנו על אוכלוסיות קטנות, אוכלוסיות גדולות יותר נמצאות בסיכון קטן יותר להכחדות מקומית. לכן בשטח גדול יותר יש פחות הכחדה מקומית של מינים.
+</div>
+
+  <div class="card">
+    <h4>חוק החזקה</h4>
+    <div class="formula">SPP = a · A^Z           <span class="comment"># צורת חוק החזקה</span>
+log(SPP) = log(a) + Z · log(A)  <span class="comment"># לינאריזציה (log-log)</span>
+
+SPP = מספר המינים    A = גודל השטח
+a = קבוע             Z = שיפוע הגרף</div>
+    <div class="explain">מקדם <em>Z</em> הוא איזה שהוא מקדם שנותן לנו אינדיקציה לאופי הקשר בין גודל השטח למספר המינים. ניתן לעשות טרנספורמציה לינארית ואז Z יהיה שיפוע הגרף. אם השיפוע חיובי אז יש קשר חיובי בין גודל השטח למספר המינים. 
+הערך של Z משתנה בהתאם למערכת הנחקרת והוא גם נותן אינדיקציה האם הגדילה במספר המינים נגרמת נגרם כתוצאה מהגדלת גודל השטח או האם מדובר בסיבה אקולוגית אחרת לקשר (לדוגמה. מעבר מבית גידול אחד לאחר).
+</div>
+  </div>
+
+  <div class="card">
+    <h4>דוגמה לגרף קשר בין שטח לעושר המינים:</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">נתונים אמיתיים: 18 איים בארכיפלג סיפו (פינלנד), 50 מיני ציפורים.</p>
+    <div class="control-row"><label>Z (שיפוע)</label><input type="range" id="sarZ" min="0.05" max="0.65" step="0.01" value="0.28" oninput="updateSAR()"><span class="val-badge" id="sarZval" style="color:var(--coral)">0.28</span></div>
+    <div class="control-row"><label>a (חותך)</label><input type="range" id="sarC" min="0.5" max="5" step="0.1" value="2.0" oninput="updateSAR()"><span class="val-badge" id="sarCval">2.0</span></div>
+    <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;flex-direction:row-reverse;">
+      <button class="btn" onclick="fitSAR()">⚡ התאמה אוטומטית</button>
+      <button class="btn secondary" onclick="toggleLog()">🔄 החלף סקאלה לוג</button>
+    </div>
+    <div class="chart-wrap" style="height:300px;"><canvas id="sarChart" role="img" aria-label="גרף פיזור הקשר שטח-מינים"></canvas></div>
+    <div class="explain" id="sarExplain">השתמשו במחוונים כדי להתאים את מודל חוק החזקה. נסו את סקאלת הלוג-לוג.</div>
+  </div>
+
+  <div class="card">
+    <h4>מדוע קיים קשר שטח–מינים?</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="info-box teal" style="margin:0"><strong>מגוון בתי גידול:</strong> שטחים גדולים מכילים יותר סוגי בתי גידול, כל אחד תומך במינים שונים</div>
+      <div class="info-box amber" style="margin:0"><strong>גודל אוכלוסייה:</strong> שטחים גדולים תומכים באוכלוסיות גדולות יותר ← סיכון הכחדה נמוך יותר</div>
+    </div>
+    <div class="explain" style="margin-top:.75rem;"><strong>השלכה לשימור:</strong> שמורה אחת גדולה עדיפה על מספר שמורות קטנות באותו שטח כולל. הפחתת שטח לחצי תפחית מינים בכ-16% (עם z = 0.25).</div>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/class-2-community-structure.js"></script>
+</body>
+</html>
