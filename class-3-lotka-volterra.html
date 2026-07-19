@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שיעור 3: מודל לוטקה-וולטרה — אקולוגיה אינטראקטיבית</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Heebo:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+</head>
+<body>
+
+<nav id="siteNav" class="nav"></nav>
+
+<nav id="classSubnav" class="nav subnav"></nav>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <div class="hero anim">
+    <div class="lesson-kicker">שיעור 3</div>
+    <h1>תחרות בין-מינית ומודל <em>לוטקה-וולטרה</em></h1>
+    <p>איך שני מינים המתחרים על אותו משאב משפיעים זה על גודל האוכלוסייה של זה — ומה קובע מי ישרוד?</p>
+  </div>
+  <div class="info-box teal">
+    <strong>הרעיון המרכזי:</strong> מודל התחרות של לוטקה-וולטרה (Lotka 1925, Volterra 1926) לוקח את משוואות הגידול הלוגיסטי של שני מינים ומוסיף לכל אחת פרמטר אחד — <em>מקדם התחרות</em> — המתאר את השפעת המין המתחרה. מתוך שתי משוואות פשוטות עולות ארבע תחזיות אפשריות לתוצאת התחרות.
+  </div>
+  <div class="topic-grid">
+    <div class="topic-card t1" onclick="showPage('p1')"><div class="topic-num">נושא 1</div><h3>מה זה תחרות?</h3><p>משאב מוגבל, חפיפת נישות, תחרות תוך-מינית מול בין-מינית ומקדם התחרות α</p></div>
+    <div class="topic-card t2" onclick="showPage('p2')"><div class="topic-num">נושא 2</div><h3>משוואות לוטקה-וולטרה</h3><p>בניית המודל מהגידול הלוגיסטי — הוספת אפקט התחרות למשוואה</p></div>
+    <div class="topic-card t3" onclick="showPage('p3')"><div class="topic-num">נושא 3</div><h3>איזוקלינות ותוצאות</h3><p>איזוקלינת ה-0, מישור הפאזה וארבע התוצאות האפשריות של התחרות</p></div>
+    <div class="topic-card t4" onclick="showPage('p4')"><div class="topic-num">נושא 4</div><h3>סימולטור ותרגול</h3><p>לומדת המודל האינטראקטיבית, תרחישי התרגיל, דוגמה פתורה ושאלות</p></div>
+  </div>
+</div>
+
+<!-- TOPIC 1 -->
+<div id="p1" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot teal">🥊</div>
+    <div><div class="sec-title">מה זה תחרות?</div><div class="sec-sub">משאב מוגבל · חפיפת נישות · מקדם התחרות</div></div>
+  </div>
+
+  <div class="info-box teal">
+    <strong>תחרות</strong> היא אינטראקציה בין פרטים או מינים הנאבקים על <em>משאב משותף מוגבל</em>. כאשר המשאב אינו מספיק לכולם, הצלחתו של פרט אחד באה על חשבון האחר, והתחרות מורידה את קצב הגידול של <em>כל</em> המעורבים — זו אינטראקציה מסוג (−/−).
+  </div>
+
+  <div class="card">
+    <h4>שני מוקדי אבחנה</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="info-box amber" style="margin:0"><strong>סוג התחרות:</strong> תחרות <em>ניצול</em> (Exploitation) — שני המינים מדלדלים את אותו משאב; לעומת תחרות <em>הפרעה</em> (Interference) — פרט מונע ישירות מהאחר גישה למשאב.</div>
+      <div class="info-box purple" style="margin:0"><strong>מי מול מי:</strong> תחרות <em>תוך-מינית</em> — בין פרטים מאותו מין (הבסיס של המודל הלוגיסטי); לעומת תחרות <em>בין-מינית</em> — בין פרטים ממינים שונים (מה שהמודל הזה מוסיף).</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>חפיפת נישות → עוצמת התחרות</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">כל מין מנצל טווח של משאבים ("נישה"). ככל שהחפיפה בין הנישות של שני המינים גדולה יותר, כך התחרות הבין-מינית עזה יותר. הזיזו את המחוון וצפו כיצד החפיפה משתנה — ואיתה מקדם התחרות.</p>
+
+    <div class="control-row">
+      <label>מרחק בין הנישות</label>
+      <input type="range" id="nicheSep" min="0" max="40" value="14" oninput="updateNiche()">
+      <span class="val-badge" id="nicheSepVal">1.4</span>
+    </div>
+
+    <div class="chart-wrap" style="height:260px;"><canvas id="nicheChart" role="img" aria-label="חפיפת נישות בין שני מינים"></canvas></div>
+
+    <div class="metrics-row" style="margin-top:1rem;">
+      <div class="metric"><div class="m-label">חפיפת נישות</div><div class="m-val teal" id="nicheOverlap">—</div></div>
+      <div class="metric"><div class="m-label">מקדם תחרות משוער α</div><div class="m-val coral" id="nicheAlpha">—</div></div>
+    </div>
+    <div class="explain" id="nicheExplain"></div>
+  </div>
+
+  <div class="card">
+    <h4>מקדם התחרות (α)</h4>
+    <div class="formula">α₁₂  <span class="comment"># מקדם התחרות של מין 1 (α)</span>
+     השפעת פרט ממין 2 על מין 1, ביחס להשפעת פרט ממין 1 על עצמו
+
+α₂₁  <span class="comment"># מקדם התחרות של מין 2 (β)</span>
+     השפעת פרט ממין 1 על מין 2, ביחס להשפעת פרט ממין 2 על עצמו
+
+<span style="color:#fac775">α &gt; 1</span>  פרט מהמין המתחרה "מפריע" יותר מאשר פרט מאותו מין  (רגישות גבוהה לתחרות בין-מינית)
+<span style="color:#9fe1cb">α = 1</span>  חפיפת נישה מלאה — פרט מתחרה = פרט מאותו מין
+<span style="color:#9fe1cb">α &lt; 1</span>  פרט מהמין המתחרה "מפריע" פחות מאשר פרט מאותו מין  (התחרות התוך-מינית חזקה יותר)</div>
+    <div class="explain"><strong>מקדם התחרות</strong> מייצג את עוצמת התחרות הבין-מינית ביחס לעוצמת התחרות התוך-מינית, <em>ברמת הפרט</em>. ככל שהמקדם גבוה יותר, כך המין רגיש יותר לתחרות עם המין המתחרה. את היחס בין α<sub>12</sub> ל-α<sub>21</sub> ובין שני כושרי הנשיאה — הוא שיקבע בהמשך את תוצאת התחרות.</div>
+  </div>
+</div>
+
+<!-- TOPIC 2 -->
+<div id="p2" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot amber">📐</div>
+    <div><div class="sec-title">משוואות לוטקה-וולטרה</div><div class="sec-sub">מהגידול הלוגיסטי אל מודל התחרות</div></div>
+  </div>
+
+  <div class="info-box amber">
+    בונים את המודל בשלושה צעדים: (1) מתחילים ממשוואת הגידול הלוגיסטי של כל מין בנפרד; (2) מוסיפים לכל משוואה גורם אחד — <em>אפקט התחרות</em> של המין השני; (3) מקבלים שתי משוואות מצומדות המתארות את הדינמיקה המשותפת.
+  </div>
+
+  <div class="card">
+    <h4>צעד 1 — תזכורת: הגידול הלוגיסטי (תחרות תוך-מינית)</h4>
+    <div class="formula">dN₁/dt = r₁ · N₁ · (K₁ − N₁) / K₁
+
+r = קצב הריבוי הרגעי המקסימלי לפרט     K = כושר הנשיאה</div>
+    <div class="explain">האיבר (K−N)/K הוא "בלם" התחרות התוך-מינית: ככל שהאוכלוסייה מתקרבת ל-K, נשארים פחות משאבים לפרט, וקצב הגידול יורד לאפס.</div>
+  </div>
+
+  <div class="card">
+    <h4>צעד 2 — אפקט התחרות הבין-מינית</h4>
+    <p style="font-size:.9rem;line-height:1.7;margin-bottom:.5rem;">אפקט התחרות מורכב משני גורמים: <strong>מקדם התחרות</strong> (כמה פרט בודד מהמין המתחרה משפיע) כפול <strong>מספר הפרטים</strong> של המין המתחרה.</p>
+    <div class="formula">α₁₂ · N₂   <span class="comment"># אפקט התחרות שמין 2 מפעיל על מין 1</span>
+α₂₁ · N₁   <span class="comment"># אפקט התחרות שמין 1 מפעיל על מין 2</span></div>
+  </div>
+
+  <div class="card">
+    <h4>צעד 3 — משוואות התחרות של לוטקה-וולטרה</h4>
+    <div class="formula"><span style="color:#e69b7b">dN₁/dt = r₁ · N₁ · (K₁ − N₁ − α₁₂·N₂) / K₁</span>
+
+<span style="color:#b7b0f0">dN₂/dt = r₂ · N₂ · (K₂ − N₂ − α₂₁·N₁) / K₂</span></div>
+    <div class="explain">לכל מין, "המקום התפוס" בכושר הנשיאה הוא כעת סכום שני גורמים: הפרטים של המין עצמו (N) <em>ועוד</em> אפקט התחרות של המין השני (α·N של המתחרה). המשוואות מצומדות — גודל אוכלוסייה אחת משפיע על קצב הגידול של השנייה.</div>
+  </div>
+
+  <div class="card">
+    <h4>המחשה: כיצד המתחרה "מכווץ" את כושר הנשיאה?</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">נניח לרגע שאוכלוסיית מין 2 קבועה על N₂. כושר הנשיאה <em>האפקטיבי</em> שנותר למין 1 הוא K₁ − α₁₂·N₂. הזיזו את המחוונים וראו כיצד עצם נוכחות המתחרה מורידה את נקודת שיווי המשקל של מין 1.</p>
+
+    <div class="control-row"><label>כושר נשיאה K₁</label><input type="range" id="ceK1" min="20" max="100" value="80" oninput="updateCompEffect()"><span class="val-badge" id="ceK1val">80</span></div>
+    <div class="control-row"><label>מקדם תחרות α₁₂</label><input type="range" id="ceA" min="0" max="200" value="80" oninput="updateCompEffect()"><span class="val-badge" id="ceAval" style="color:var(--coral)">0.80</span></div>
+    <div class="control-row"><label>גודל אוכלוסיית מין 2 (N₂)</label><input type="range" id="ceN2" min="0" max="80" value="40" oninput="updateCompEffect()"><span class="val-badge" id="ceN2val" style="color:var(--purple)">40</span></div>
+
+    <div class="chart-wrap" style="height:260px;"><canvas id="compEffectChart" role="img" aria-label="השפעת התחרות על שיווי המשקל של מין 1"></canvas></div>
+    <div class="explain" id="ceExplain"></div>
+  </div>
+</div>
+
+<!-- TOPIC 3 -->
+<div id="p3" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot purple">📊</div>
+    <div><div class="sec-title">איזוקלינות ותוצאות התחרות</div><div class="sec-sub">איזוקלינת ה-0 · מישור הפאזה · ארבע התוצאות</div></div>
+  </div>
+
+  <div class="info-box purple">
+    <strong>איזוקלינת ה-0</strong> של מין היא אוסף כל שילובי גדלי האוכלוסיות (N₁, N₂) שבהם קצב הגידול של אותו מין שווה ל-0. מציבים את שתי האיזוקלינות על מישור פאזה משותף (ציר X = מין 1, ציר Y = מין 2), וממקומן היחסי מסיקים את תוצאת התחרות.
+  </div>
+
+  <div class="card">
+    <h4>גזירת האיזוקלינות</h4>
+    <div class="formula">מין 1:  dN₁/dt = 0  ⇐  K₁ − N₁ − α₁₂·N₂ = 0
+        <span style="color:#e69b7b">N₂ = (K₁ − N₁) / α₁₂</span>
+        חיתוך ציר X (מין 1):  N₁ = K₁
+        חיתוך ציר Y (מין 2):  N₂ = K₁/α₁₂
+
+מין 2:  dN₂/dt = 0  ⇐  K₂ − N₂ − α₂₁·N₁ = 0
+        <span style="color:#b7b0f0">N₂ = K₂ − α₂₁·N₁</span>
+        חיתוך ציר Y (מין 2):  N₂ = K₂
+        חיתוך ציר X (מין 1):  N₁ = K₂/α₂₁</div>
+    <div class="explain">מתחת לאיזוקלינה של מין מסוים — האוכלוסייה שלו גדלה; מעליה — היא קטנה. נקודת שיווי המשקל של המערכת נמצאת שם שתי האיזוקלינות נחתכות (אם הן נחתכות).</div>
+  </div>
+
+  <div class="card">
+    <h4>מסווג התוצאות — שחקו עם האיזוקלינות</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">כאן משנים <em>רק</em> את כושרי הנשיאה ומקדמי התחרות (הגיאומטריה של האיזוקלינות). המערכת מזהה לאיזו מארבע התוצאות שייך המצב, לפי התנאים של המודל.</p>
+
+    <div class="comm-side">
+      <div class="comm-panel">
+        <h5><span class="badge" style="background:var(--coral)"></span> מין 1</h5>
+        <div class="control-row"><label>K₁</label><input type="range" id="icK1" min="10" max="100" value="60" oninput="updateIsocline()"><span class="val-badge" id="icK1val">60</span></div>
+        <div class="control-row"><label>α₁₂</label><input type="range" id="icA12" min="10" max="200" value="70" oninput="updateIsocline()"><span class="val-badge" id="icA12val" style="color:var(--coral)">0.70</span></div>
+      </div>
+      <div class="comm-panel">
+        <h5><span class="badge" style="background:var(--purple)"></span> מין 2</h5>
+        <div class="control-row"><label>K₂</label><input type="range" id="icK2" min="10" max="100" value="50" oninput="updateIsocline()"><span class="val-badge" id="icK2val">50</span></div>
+        <div class="control-row"><label>α₂₁</label><input type="range" id="icA21" min="10" max="200" value="60" oninput="updateIsocline()"><span class="val-badge" id="icA21val" style="color:var(--purple)">0.60</span></div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin:.5rem 0 1rem;flex-wrap:wrap;flex-direction:row-reverse;">
+      <button class="btn secondary" onclick="loadIsoclinePreset('sp1')">מין 1 דוחק</button>
+      <button class="btn secondary" onclick="loadIsoclinePreset('sp2')">מין 2 דוחק</button>
+      <button class="btn secondary" onclick="loadIsoclinePreset('stable')">דו-קיום יציב</button>
+      <button class="btn secondary" onclick="loadIsoclinePreset('unstable')">דו-קיום לא-יציב</button>
+    </div>
+
+    <div class="chart-wrap" style="height:320px;"><canvas id="isoclineChart" role="img" aria-label="מישור פאזה עם איזוקלינות ה-0"></canvas></div>
+
+    <div class="metric" id="outcomeBox" style="margin-top:1rem;text-align:center;padding:1rem;">
+      <div class="m-label" style="font-size:11px;">תוצאת התחרות</div>
+      <div class="m-val" id="outcomeLabel" style="font-size:1.15rem;">—</div>
+    </div>
+    <div class="explain" id="isoclineExplain"></div>
+  </div>
+
+  <div class="card">
+    <h4>ארבע התוצאות — סיכום התנאים</h4>
+    <table class="comp-table">
+      <thead><tr><th>תנאי</th><th>תוצאה</th><th>הגורם המגביל</th></tr></thead>
+      <tbody>
+        <tr><td><strong>K₁ &gt; K₂/α₂₁</strong> וגם <strong>K₂ &lt; K₁/α₁₂</strong></td><td>מין 1 דוחק את מין 2</td><td>מין 1 חזק דיו לדחוק</td></tr>
+        <tr><td><strong>K₁ &lt; K₂/α₂₁</strong> וגם <strong>K₂ &gt; K₁/α₁₂</strong></td><td>מין 2 דוחק את מין 1</td><td>מין 2 חזק דיו לדחוק</td></tr>
+        <tr><td><strong>K₁ &lt; K₂/α₂₁</strong> וגם <strong>K₂ &lt; K₁/α₁₂</strong></td><td>דו-קיום יציב</td><td>תחרות תוך-מינית (כל מין מגביל בעיקר את עצמו)</td></tr>
+        <tr><td><strong>K₁ &gt; K₂/α₂₁</strong> וגם <strong>K₂ &gt; K₁/α₁₂</strong></td><td>דו-קיום לא-יציב</td><td>תחרות בין-מינית — התוצאה תלויה בתנאי ההתחלה</td></tr>
+      </tbody>
+    </table>
+    <div class="explain"><strong>דו-קיום יציב</strong> מתקיים כאשר כל מין מגביל את עצמו (תחרות תוך-מינית) יותר מכפי שהוא מגביל את המתחרה — כלומר שני מקדמי התחרות נמוכים דיים והפער בין כושרי הנשיאה אינו גדול מדי.</div>
+  </div>
+</div>
+
+<!-- TOPIC 4 -->
+<div id="p4" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot coral">🎛️</div>
+    <div><div class="sec-title">סימולטור ותרגול</div><div class="sec-sub">לומדת מודל התחרות · תרחישי התרגיל · דוגמה פתורה</div></div>
+  </div>
+
+  <div class="info-box coral">
+    לומדת מודל התחרות של לוטקה-וולטרה — בנויה כאן בתוך האתר, על בסיס
+    <a href="https://ecomplab.com/teaching/lvmodel_competition/index.html" target="_blank" rel="noopener" style="color:var(--coral);">הלומדה של EcoComplab</a>.
+    שנו את קצבי הגידול, כושרי הנשיאה, גדלי האוכלוסייה ההתחלתיים ומקדמי התחרות, וצפו בו-זמנית בדינמיקה בזמן, במסלול הפאזה ובאיזוקלינות.
+  </div>
+
+  <div class="card">
+    <div class="comm-side">
+      <div class="comm-panel">
+        <h5><span class="badge" style="background:var(--coral)"></span> מין 1</h5>
+        <div class="control-row"><label>r₁ (קצב גידול)</label><input type="range" id="simR1" min="0" max="200" value="50" oninput="updateSim()"><span class="val-badge" id="simR1val" style="color:var(--coral)">0.50</span></div>
+        <div class="control-row"><label>K₁ (כושר נשיאה)</label><input type="range" id="simK1" min="1" max="100" value="50" oninput="updateSim()"><span class="val-badge" id="simK1val">50</span></div>
+        <div class="control-row"><label>N₁(0) (גודל התחלתי)</label><input type="range" id="simN1" min="1" max="130" value="10" oninput="updateSim()"><span class="val-badge" id="simN1val">10</span></div>
+        <div class="control-row"><label>α₁₂ (השפעת 2 על 1)</label><input type="range" id="simA12" min="0" max="200" value="100" oninput="updateSim()"><span class="val-badge" id="simA12val" style="color:var(--coral)">1.00</span></div>
+      </div>
+      <div class="comm-panel">
+        <h5><span class="badge" style="background:var(--purple)"></span> מין 2</h5>
+        <div class="control-row"><label>r₂ (קצב גידול)</label><input type="range" id="simR2" min="0" max="200" value="50" oninput="updateSim()"><span class="val-badge" id="simR2val" style="color:var(--purple)">0.50</span></div>
+        <div class="control-row"><label>K₂ (כושר נשיאה)</label><input type="range" id="simK2" min="1" max="100" value="50" oninput="updateSim()"><span class="val-badge" id="simK2val">50</span></div>
+        <div class="control-row"><label>N₂(0) (גודל התחלתי)</label><input type="range" id="simN2" min="1" max="130" value="10" oninput="updateSim()"><span class="val-badge" id="simN2val">10</span></div>
+        <div class="control-row"><label>α₂₁ (השפעת 1 על 2)</label><input type="range" id="simA21" min="0" max="200" value="100" oninput="updateSim()"><span class="val-badge" id="simA21val" style="color:var(--purple)">1.00</span></div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin:.25rem 0 1rem;flex-wrap:wrap;flex-direction:row-reverse;">
+      <button class="btn secondary" onclick="loadSimPreset('equal')">פרמטרים זהים</button>
+      <button class="btn secondary" onclick="loadSimPreset('s1')">תרחיש 1</button>
+      <button class="btn secondary" onclick="loadSimPreset('s2')">תרחיש 2</button>
+      <button class="btn secondary" onclick="loadSimPreset('s3')">תרחיש 3</button>
+      <button class="btn" onclick="loadSimPreset('reset')">↺ איפוס</button>
+    </div>
+
+    <div class="metric" id="simOutcomeBox" style="text-align:center;padding:.9rem;margin-bottom:1rem;">
+      <div class="m-label" style="font-size:11px;">תוצאת התחרות</div>
+      <div class="m-val" id="simOutcomeLabel" style="font-size:1.1rem;">—</div>
+    </div>
+
+    <div style="font-size:.8rem;color:var(--muted);text-align:right;margin-bottom:4px;">דינמיקת האוכלוסיות בזמן</div>
+    <div class="chart-wrap" style="height:260px;"><canvas id="simTimeChart" role="img" aria-label="דינמיקת האוכלוסיות בזמן"></canvas></div>
+
+    <div style="font-size:.8rem;color:var(--muted);text-align:right;margin:1rem 0 4px;">מישור פאזה — מסלול, איזוקלינות ושדה כיוונים</div>
+    <div class="chart-wrap" style="height:340px;"><canvas id="simPhaseChart" role="img" aria-label="מישור פאזה עם מסלול ואיזוקלינות"></canvas></div>
+
+    <div class="explain" id="simExplain"></div>
+  </div>
+
+  <div class="card">
+    <h4>דוגמה פתורה: חרדוני-צב מול צבאים בחורשת שיטים</h4>
+    <p style="font-size:.88rem;line-height:1.7;margin-bottom:.5rem;">בחורשת שיטים באזור הרי אילת חיים <strong>30 חרדוני-צב</strong> (מין 1) ו-<strong>10 צבאים</strong> (מין 2). שניהם ניזונים מהצומח הטבעי. ללא תחרות, החרדונים מגיעים ל-K₁=40 (r₁=0.6) והצבאים ל-K₂=25 (r₂=1.4). חרדון בודד מוריד את קצב הגידול של צבי ב-20% ושל חרדון אחר ב-8%; צבי בודד מוריד את קצב הגידול של חרדון ב-10% ושל צבי אחר ב-15%.</p>
+    <div class="formula">מקדמי התחרות = השפעה בין-מינית / השפעה תוך-מינית:
+α₁₂ (השפעת צבי על חרדון) = 10% / 8%  = 1.25
+α₂₁ (השפעת חרדון על צבי) = 20% / 15% ≈ 1.33
+
+בדיקת התנאים:
+K₁/α₁₂ = 40 / 1.25 = 32   →  K₂ = 25 &lt; 32   ✔
+K₂/α₂₁ = 25 / 1.33 ≈ 18.8 →  K₁ = 40 &gt; 18.8 ✔
+
+K₁ &gt; K₂/α₂₁  וגם  K₂ &lt; K₁/α₁₂  ⇒  מין 1 (החרדון) דוחק את מין 2 (הצבי)</div>
+    <div class="explain">שני מקדמי התחרות גדולים מ-1 (חפיפת נישה גבוהה), אך כושר הנשיאה של החרדון גדול דיו כדי לדחוק את הצבי. חשש הפקח מוצדק: ללא התערבות, אוכלוסיית הצבאים צפויה להיעלם מהחורשה. נסו את הערכים בסימולטור למעלה (r₁=0.6, K₁=40, N₁=30, α₁₂=1.25; r₂=1.4, K₂=25, N₂=10, α₂₁=1.33).</p>
+  </div>
+
+  <div class="card">
+    <h4>בדקו את עצמכם</h4>
+    <div id="quizBox"></div>
+  </div>
+
+  <div class="card">
+    <h4>שאלות התרגיל</h4>
+    <div class="info-box teal" style="margin:0">
+      השאלות המלאות של התרגיל (תרחישים 1–3, המיינות והדררות, היעלים והפראים ועוד) נמצאות בקובץ התרגיל. השתמשו בסימולטור ובמסווג האיזוקלינות שבשיעור זה כדי לחקור כל תרחיש, לזהות את תוצאת התחרות, ולבחון כיצד שינוי של פרמטר בודד הופך את התוצאה.
+    </div>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/class-3-lotka-volterra.js"></script>
+</body>
+</html>
