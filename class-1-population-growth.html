@@ -154,10 +154,21 @@ ln(Nt) = ln(N0) + r·t            <span class="comment"># טרנספורמציה
     <div class="formula">dN/dt = r · Nt · (K − Nt)/K       <span class="comment"># קצב גידול תלוי-צפיפות</span>
 
 לאחר אינטגרציה:
-Nt = K / (1 + ((K − N0)/N0)·e^(−r·t))
+Nt = K / (1 + ((K − N0)/N0)·e^(−r·t))</div>
+  </div>
 
-טרנספורמציה לינארית:
-ln((K − Nt)/Nt) = ln((K − N0)/N0) − r·t   <span class="comment"># שיפוע = −r</span></div>
+  <div class="card">
+    <h4>טרנספורמציה לינארית</h4>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">בדיוק כמו במודל האקספוננציאלי, גם עקומת הגידול הלוגיסטי אינה קו ישר. לוקחים לוגריתם טבעי משני האגפים ומקבלים משוואת קו ישר, שממנה אפשר לחלץ את r ישירות מהשיפוע.</p>
+    <div class="formula">ln((K − Nt)/Nt) = ln((K − N0)/N0) − r·t
+
+נקודת חיתוך (Y) = ln((K − N0)/N0)
+שיפוע הקו             = <span style="color:#fac775">−r</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:.75rem;">
+      <div class="info-box teal" style="margin:0"><strong>קצב גידול חיובי (r &gt; 0)</strong> ← שיפוע <strong>שלילי</strong> (הקו יורד)</div>
+      <div class="info-box coral" style="margin:0"><strong>קצב גידול שלילי (r &lt; 0)</strong> ← שיפוע <strong>חיובי</strong> (הקו עולה)</div>
+    </div>
+    <div class="explain">שיפוע הגרף הוא קצב הגידול (בהיפוך סימן): ככל שהאוכלוסייה גדלה מהר יותר לעבר K, כך הקו במשוואה הלינארית יורד בשיפוע תלול יותר.</div>
   </div>
 
   <div class="card">
