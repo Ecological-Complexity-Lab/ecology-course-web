@@ -312,54 +312,6 @@ function renderObsVsExp() {
 }
 
 // ============================================================
-// TOPIC 4: WILD DONKEY (Asiatic wild ass) PROJECTION
-// ============================================================
-const DONKEY_N0 = 37, DONKEY_R = 0.22;
-
-function updateDonkey() {
-  const sources = +document.getElementById('donkeySrc').value;
-  const cap = +document.getElementById('donkeyCap').value;
-  const t = +document.getElementById('donkeyT').value;
-  document.getElementById('donkeySrcVal').textContent = sources;
-  document.getElementById('donkeyCapVal').textContent = cap;
-  document.getElementById('donkeyTVal').textContent = t;
-
-  const K = sources * cap;
-  const nt = (T) => K / (1 + ((K - DONKEY_N0) / DONKEY_N0) * Math.exp(-DONKEY_R * T));
-
-  const pts = [];
-  for (let i = 0; i <= 60; i++) pts.push({ x: i, y: nt(i) });
-  const current = nt(t);
-
-  makeChart('donkeyChart', {
-    type: 'line',
-    data: {
-      datasets: [
-        { label: 'גודל אוכלוסייה', data: pts, borderColor: '#993c1d', backgroundColor: 'rgba(153,60,29,0.08)', fill: true, borderWidth: 2.5, pointRadius: 0, tension: 0.15 },
-        { label: `כיום (t=${t})`, data: [{ x: t, y: current }], type: 'scatter', backgroundColor: '#0f6e56', borderColor: '#0f6e56', pointRadius: 6 },
-        { label: 'K', data: [{ x: 0, y: K }, { x: 60, y: K }], borderColor: '#ba7517', borderDash: [6, 4], borderWidth: 1.5, pointRadius: 0 }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { labels: { font: { family: 'Heebo', size: 10 }, boxWidth: 10 } } },
-      scales: {
-        x: { type: 'linear', title: { display: true, text: 'שנים מאז 1995', font: { family: 'Heebo', size: 11 } } },
-        y: { title: { display: true, text: 'גודל אוכלוסייה', font: { family: 'Heebo', size: 11 } }, beginAtZero: true }
-      }
-    }
-  });
-
-  document.getElementById('donkeyCalc').textContent =
-    `K = ${sources} × ${cap} = ${K}   |   Nt = ${K}/(1+((${K}−37)/37)·e^(−0.22×${t})) = ${current.toFixed(1)}`;
-
-  const pct = current / K;
-  document.getElementById('donkeyExplain').innerHTML = pct > 0.95
-    ? `<strong>האוכלוסייה קרובה מאוד ל-K</strong> (${(pct * 100).toFixed(0)}% ממנה) — קצב הגידול כבר איטי מאוד. כדי לאפשר לאוכלוסייה להמשיך לגדול, צריך להגדיל את K עצמו — למשל להוסיף מקורות מים או להגדיל את קיבולתם.`
-    : `לאחר ${t} שנים, האוכלוסייה צפויה למנות כ-<strong>${current.toFixed(0)}</strong> פרטים מתוך K = ${K} (${(pct * 100).toFixed(0)}%).`;
-}
-
-// ============================================================
 // TOPIC 4: ALLEE EFFECT
 // ============================================================
 const ALLEE_K = 100, ALLEE_R = 0.1;
@@ -368,20 +320,20 @@ function updateAllee() {
   const A = +document.getElementById('alleeA').value;
   document.getElementById('alleeAVal').textContent = A;
 
-  const standardPts = [], alleePts = [];
+  const alleePts = [];
   for (let i = 0; i <= 50; i++) {
     const N = ALLEE_K * i / 50;
-    standardPts.push({ x: N, y: ALLEE_R * (1 - N / ALLEE_K) });
     const g = A > 0 ? ALLEE_R * (1 - N / ALLEE_K) * (N / A - 1) : ALLEE_R * (1 - N / ALLEE_K);
     alleePts.push({ x: N, y: g });
   }
+  const zeroLine = [{ x: 0, y: 0 }, { x: ALLEE_K, y: 0 }];
 
   makeChart('alleeChart', {
     type: 'line',
     data: {
       datasets: [
-        { label: 'קצב גידול לפרט — לוגיסטי רגיל', data: standardPts, borderColor: '#888780', borderDash: [5, 3], backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, tension: 0.2 },
-        { label: 'קצב גידול לפרט — עם Allee', data: alleePts, borderColor: '#993c1d', backgroundColor: 'rgba(153,60,29,0.08)', fill: true, borderWidth: 2.5, pointRadius: 0, tension: 0.2 }
+        { label: 'קצב גידול לפרט — עם Allee', data: alleePts, borderColor: '#993c1d', backgroundColor: 'rgba(153,60,29,0.08)', fill: true, borderWidth: 2.5, pointRadius: 0, tension: 0.2 },
+        { label: 'קו אפס', data: zeroLine, borderColor: '#888780', borderDash: [5, 3], backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 0 }
       ]
     },
     options: {
@@ -442,6 +394,5 @@ computeKAndR();
 updateExp();
 updateLogistic();
 renderObsVsExp();
-updateDonkey();
 updateAllee();
 initQuiz();

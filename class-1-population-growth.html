@@ -230,19 +230,6 @@ Nt = K / (1 + ((K − N0)/N0)·e^(−r·t))</div>
   </div>
 
   <div class="card">
-    <h4>מקרה נוסף: השבת הפרא האסייתי לטבע</h4>
-    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">ב-1995 הושבו לטבע <strong>37 פרטים</strong> של הפרא האסייתי. נמצא כי קצב הרבייה הרגעי לפרט הוא <strong>r = 0.22</strong>, וכי הגורם המגביל העיקרי הוא מקורות מים. שנו את מספר מקורות המים והקיבולת הממוצעת של כל מקור כדי לחשב את K ולראות כיצד האוכלוסייה צפויה להתפתח.</p>
-
-    <div class="control-row"><label>מספר מקורות מים</label><input type="range" id="donkeySrc" min="5" max="50" value="25" oninput="updateDonkey()"><span class="val-badge" id="donkeySrcVal">25</span></div>
-    <div class="control-row"><label>פרטים למקור (בממוצע)</label><input type="range" id="donkeyCap" min="5" max="50" value="25" oninput="updateDonkey()"><span class="val-badge" id="donkeyCapVal">25</span></div>
-    <div class="control-row"><label>שנים מאז 1995</label><input type="range" id="donkeyT" min="1" max="60" value="30" oninput="updateDonkey()"><span class="val-badge" id="donkeyTVal">30</span></div>
-
-    <div class="chart-wrap"><canvas id="donkeyChart" role="img" aria-label="תחזית אוכלוסיית הפרא האסייתי"></canvas></div>
-    <div class="formula" id="donkeyCalc" style="margin-top:1rem;"></div>
-    <div class="explain" id="donkeyExplain"></div>
-  </div>
-
-  <div class="card">
     <h4>אפקט Allee — כשצפיפות גבוהה יותר עוזרת, לא מזיקה</h4>
     <div class="info-box coral">ברוב המקרים, ככל שהאוכלוסייה גדלה, קצב הגידול לפרט קטן (תחרות על משאבים). אבל לפעמים קורה ההפך: <strong>ב-Allee Effect</strong> קצב הגידול עולה כאשר האוכלוסייה גדלה — בעיקר באוכלוסיות קטנות. דוגמה: קושי במציאת בן/בת זוג, או צורך בציד קבוצתי.</div>
     <div class="control-row"><label>עוצמת אפקט Allee (סף A)</label><input type="range" id="alleeA" min="0" max="40" value="15" oninput="updateAllee()"><span class="val-badge" id="alleeAVal">15</span></div>
