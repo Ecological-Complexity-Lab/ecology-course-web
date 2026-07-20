@@ -26,6 +26,7 @@ const ECOLOGY_CLASSES = [
       { id: 'p2', label: 'משוואות לוטקה-וולטרה' },
       { id: 'p3', label: 'איזוקלינות ותוצאות' },
       { id: 'p4', label: 'סימולטור ותרגול' },
+      { id: 'p5', label: 'בדקו את עצמכם' },
     ] },
   { num: 4, label: 'רשתות אקולוגיות',         file: 'class-4-scientific-paper.html',     desc: 'קריאת מאמר מדעי ורשתות אינטראקציה אקולוגיות.', ready: false },
   { num: 5, label: 'הכנה לסיור',              file: 'class-5-pre-trip.html',              desc: 'הכנה לסיור השדה — שיטות דגימה ותכנון.', ready: false },

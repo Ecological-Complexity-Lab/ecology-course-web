@@ -16,7 +16,7 @@ function lvOutcome(K1, K2, a12, a21) {
   // Happens e.g. when the species are identical with α=1 — a neutral, non-
   // generic state (assignment Q1a: "do the isoclines overlap?").
   if (a12 > 0 && Math.abs(K1 / a12 - K2) < 0.6 && Math.abs(1 / a12 - a21) < 0.03)
-    return { key: 'overlap', label: 'איזוקלינות חופפות (מצב מנוון)', cls: 'amber', color: '#ba7517' };
+    return { key: 'overlap', label: 'איזוקלינות חופפות', cls: 'amber', color: '#ba7517' };
   const A = a21 > 0 ? K2 / a21 : Infinity;   // compare with K1
   const B = a12 > 0 ? K1 / a12 : Infinity;   // compare with K2
   const k1big = K1 > A;   // K1 > K2/α21
@@ -24,7 +24,7 @@ function lvOutcome(K1, K2, a12, a21) {
   if (k1big && !k2big)  return { key: 'sp1',      label: 'מין 1 דוחק את מין 2',                cls: 'coral',  color: SP1_COLOR };
   if (!k1big && k2big)  return { key: 'sp2',      label: 'מין 2 דוחק את מין 1',                cls: 'purple', color: SP2_COLOR };
   if (!k1big && !k2big) return { key: 'stable',   label: 'דו-קיום יציב',                       cls: 'teal',   color: '#0f6e56' };
-  return                       { key: 'unstable', label: 'דו-קיום לא-יציב (תלוי בתנאי התחלה)', cls: 'amber',  color: '#ba7517' };
+  return                       { key: 'unstable', label: 'דו-קיום לא-יציב', cls: 'amber',  color: '#ba7517' };
 }
 
 // RK4 integration of the coupled system.
@@ -91,6 +91,9 @@ function vectorFieldPlugin(getField) {
 
 // ============================================================
 // TOPIC 1: NICHE OVERLAP → COMPETITION COEFFICIENT
+// Two resource-use curves; the slider sets the distance between the
+// niches, the shaded region is their overlap, and the overlap maps
+// to the (approximate) competition coefficient α.
 // ============================================================
 function normPdf(x, m, s) { return Math.exp(-0.5 * ((x - m) / s) ** 2) / (s * Math.sqrt(2 * Math.PI)); }
 function erf(x) {
@@ -105,10 +108,12 @@ function updateNiche() {
   document.getElementById('nicheSepVal').textContent = (sep / 10).toFixed(1);
   const m1 = 50 - sep / 2, m2 = 50 + sep / 2;
 
-  const c1 = [], c2 = [];
+  const c1 = [], c2 = [], overlapArea = [];
   for (let x = 0; x <= 100; x += 1) {
-    c1.push({ x, y: normPdf(x, m1, NICHE_SIGMA) });
-    c2.push({ x, y: normPdf(x, m2, NICHE_SIGMA) });
+    const y1 = normPdf(x, m1, NICHE_SIGMA), y2 = normPdf(x, m2, NICHE_SIGMA);
+    c1.push({ x, y: y1 });
+    c2.push({ x, y: y2 });
+    overlapArea.push({ x, y: Math.min(y1, y2) });   // shaded overlap region
   }
   // Overlap of two equal-variance normals separated by d: 2·Φ(−d/2σ).
   const overlap = 2 * 0.5 * (1 + erf(-(sep / 2) / (NICHE_SIGMA * Math.SQRT2)));
@@ -118,8 +123,9 @@ function updateNiche() {
     type: 'line',
     data: {
       datasets: [
-        { label: 'מין 1', data: c1, borderColor: SP1_COLOR, backgroundColor: 'rgba(153,60,29,0.12)', fill: true, borderWidth: 2, pointRadius: 0, tension: 0.3 },
-        { label: 'מין 2', data: c2, borderColor: SP2_COLOR, backgroundColor: 'rgba(83,74,183,0.12)', fill: true, borderWidth: 2, pointRadius: 0, tension: 0.3 }
+        { label: 'מין 1', data: c1, borderColor: SP1_COLOR, backgroundColor: 'rgba(153,60,29,0.10)', fill: true, borderWidth: 2, pointRadius: 0, tension: 0.3 },
+        { label: 'מין 2', data: c2, borderColor: SP2_COLOR, backgroundColor: 'rgba(83,74,183,0.10)', fill: true, borderWidth: 2, pointRadius: 0, tension: 0.3 },
+        { label: 'חפיפה', data: overlapArea, borderColor: 'transparent', backgroundColor: 'rgba(186,117,23,0.45)', fill: 'origin', borderWidth: 0, pointRadius: 0, tension: 0.3 }
       ]
     },
     options: {
@@ -284,10 +290,35 @@ function updateIsocline() {
     sp2: 'האיזוקלינה של מין 2 נמצאת כולה מעל זו של מין 1 — מין 2 דוחק את מין 1.',
     stable: 'האיזוקלינות נחתכות כך שכל מין מגביל את עצמו יותר משהוא מגביל את המתחרה. הנקודה המשותפת היא שיווי משקל יציב — המערכת מתכנסת אליה מכל תנאי התחלה.',
     unstable: 'האיזוקלינות נחתכות אך כל מין מגביל את המתחרה יותר מאשר את עצמו. נקודת החיתוך אינה יציבה — התוצאה הסופית (מי ידחוק את מי) תלויה בתנאי ההתחלה.',
-    overlap: 'שתי האיזוקלינות מונחות זו על זו. זהו מצב מנוון המתאר מינים זהים לחלוטין (חפיפת נישה מושלמת, α=1) — אינו סביר בטבע, וכל נקודה על הישר היא שיווי משקל נייטרלי.'
+    overlap: 'שתי האיזוקלינות מונחות זו על זו. זהו מצב שבו האיזוקלינות חופפות המתאר מינים זהים לחלוטין (חפיפת נישה מושלמת, α=1) — אינו סביר בטבע, וכל נקודה על הישר היא שיווי משקל נייטרלי.'
   }[out.key];
   document.getElementById('isoclineExplain').innerHTML = `<strong>${out.label}.</strong> ${expl}<br><span style="font-family:'DM Mono',monospace;font-size:.8rem;">${cond}</span>`;
 }
+
+// ============================================================
+// TOPIC 3: STEP-BY-STEP ISOCLINE BUILDER (static SVG stepper)
+// ============================================================
+let isoBuildStep = 1;
+const ISO_STEPS = 7;
+const ISO_CAPTIONS = {
+  1: '<strong>מערכת הצירים.</strong> ציר X מייצג את גודל אוכלוסיית מין 1 (N₁), וציר Y את מין 2 (N₂).',
+  2: '<strong>חיתוך עם ציר N₁.</strong> כשאין פרטים ממין 2 (N₂=0), מין 1 גדל עד כושר הנשיאה שלו — הנקודה N₁ = K₁.',
+  3: '<strong>חיתוך עם ציר N₂.</strong> כשאין פרטים ממין 1 (N₁=0), אפקט התחרות של מין 2 ממלא לבדו את כושר הנשיאה, בגובה N₂ = K₁/α₁₂.',
+  4: '<strong>איזוקלינת מין 1 (dN₁/dt = 0).</strong> מחברים את שתי הנקודות. מתחת לקו אוכלוסיית מין 1 גדלה (חצים ימינה), ומעליו היא קטנה (חצים שמאלה).',
+  5: '<strong>חוזרים על התהליך למין 2.</strong> חיתוך ציר N₂ בגובה K₂, וחיתוך ציר N₁ ב-K₂/α₂₁.',
+  6: '<strong>איזוקלינת מין 2 (dN₂/dt = 0).</strong> הקו המקווקו. מתחת לקו אוכלוסיית מין 2 גדלה (חצים למעלה), ומעליו היא קטנה (חצים למטה).',
+  7: '<strong>נקודת החיתוך.</strong> במפגש שתי האיזוקלינות אף אוכלוסייה אינה משתנה — זו נקודת שיווי המשקל של המערכת.'
+};
+function renderIsoStep() {
+  document.querySelectorAll('#isoBuildSvg [data-from]').forEach(el => {
+    const from = +el.getAttribute('data-from');
+    const to = el.hasAttribute('data-to') ? +el.getAttribute('data-to') : 999;
+    el.style.display = (isoBuildStep >= from && isoBuildStep <= to) ? '' : 'none';
+  });
+  document.getElementById('isoStepLabel').textContent = `שלב ${isoBuildStep} מתוך ${ISO_STEPS}`;
+  document.getElementById('isoBuildCaption').innerHTML = ISO_CAPTIONS[isoBuildStep];
+}
+function isoStep(d) { isoBuildStep = Math.min(ISO_STEPS, Math.max(1, isoBuildStep + d)); renderIsoStep(); }
 
 // ============================================================
 // TOPIC 4: FULL DYNAMIC SIMULATOR
@@ -367,17 +398,69 @@ function updateSim() {
   });
 
   const out = lvOutcome(p.K1, p.K2, p.a12, p.a21);
-  const box = document.getElementById('simOutcomeBox');
-  box.style.background = `var(--${out.cls}-light)`;
-  const lab = document.getElementById('simOutcomeLabel');
-  lab.textContent = out.label;
-  lab.style.color = out.color;
-
   const f1 = sim.x1[sim.x1.length - 1], f2 = sim.x2[sim.x2.length - 1];
-  document.getElementById('simExplain').innerHTML =
-    `לפי הגיאומטריה של האיזוקלינות, התוצאה הצפויה היא <strong style="color:${out.color}">${out.label}</strong>. ` +
-    `בסיום ההדמיה (מתנאי ההתחלה N₁=${p.N1}, N₂=${p.N2}): מין 1 ≈ <strong>${f1.toFixed(1)}</strong>, מין 2 ≈ <strong>${f2.toFixed(1)}</strong>. ` +
-    `שנו פרמטר בודד וצפו כיצד המסלול, המצב הסופי ולעיתים תוצאת התחרות משתנים.`;
+  renderSimQuiz(out, p, f1, f2);
+}
+
+// ------------------------------------------------------------
+// Predict-the-outcome multiple-choice question. The result is NOT
+// revealed until the user picks the correct answer; wrong picks are
+// marked but the correct one stays hidden. Resets on every parameter
+// change (updateSim), so each configuration is a fresh question.
+// ------------------------------------------------------------
+const SIM_QUIZ_OPTS = [
+  { key: 'sp1', label: 'מין 1 דוחק את מין 2' },
+  { key: 'sp2', label: 'מין 2 דוחק את מין 1' },
+  { key: 'stable', label: 'דו-קיום יציב' },
+  { key: 'unstable', label: 'דו-קיום לא-יציב' }
+];
+function renderSimQuiz(out, p, f1, f2) {
+  const optsEl = document.getElementById('simQuizOpts');
+  const note = document.getElementById('simQuizNote');
+  const explain = document.getElementById('simExplain');
+  optsEl.innerHTML = '';
+  note.style.display = 'none';
+  note.className = '';
+  note.textContent = '';
+
+  // Degenerate (coinciding isoclines) case: not one of the four results.
+  if (out.key === 'overlap') {
+    note.style.display = 'block';
+    note.className = 'explain';
+    note.innerHTML = '<strong>האיזוקלינות חופפות:</strong> מינים זהים לחלוטין (α=1) — אין תוצאת תחרות יחידה שניתן לחזות.';
+    explain.innerHTML = 'שנו פרמטר כלשהו כדי שהאיזוקלינות לא יחפפו ולקבל שאלת חיזוי.';
+    return;
+  }
+
+  explain.innerHTML = 'בחרו את תוצאת התחרות שאתם צופים לפי מיקום האיזוקלינות. ההסבר המלא ייחשף לאחר תשובה נכונה.';
+  let solved = false;
+  SIM_QUIZ_OPTS.forEach(o => {
+    const b = document.createElement('button');
+    b.className = 'quiz-opt';
+    b.textContent = o.label;
+    b.addEventListener('click', () => {
+      if (solved) return;
+      if (o.key === out.key) {
+        solved = true;
+        b.classList.add('correct');
+        [...optsEl.children].forEach(c => { c.disabled = true; });
+        note.style.display = 'block';
+        note.className = 'quiz-feedback ok';
+        note.textContent = '✓ נכון!';
+        explain.innerHTML =
+          `התוצאה היא <strong style="color:${out.color}">${out.label}</strong>. ` +
+          `בסיום ההדמיה (מתנאי ההתחלה N₁=${p.N1}, N₂=${p.N2}): מין 1 ≈ <strong>${f1.toFixed(1)}</strong>, מין 2 ≈ <strong>${f2.toFixed(1)}</strong>. ` +
+          `שנו פרמטר בודד וצפו כיצד המסלול, המצב הסופי ולעיתים תוצאת התחרות משתנים.`;
+      } else {
+        b.classList.add('wrong');
+        b.disabled = true;
+        note.style.display = 'block';
+        note.className = 'quiz-feedback no';
+        note.textContent = '✗ לא מדויק — נסו שוב. בחנו איזו איזוקלינה חיצונית יותר ומי מגביל את מי.';
+      }
+    });
+    optsEl.appendChild(b);
+  });
 }
 
 // ============================================================
@@ -400,7 +483,7 @@ function initQuiz() {
       q: 'שני מקדמי התחרות שווים ל-1 וכל שאר הפרמטרים זהים בין המינים. מה מצב האיזוקלינות?',
       opts: ['הן מצטלבות בזווית ישרה', 'הן חופפות (מונחות זו על זו)', 'הן מקבילות', 'אין להן חיתוך חיובי'],
       correct: 1,
-      feedback: 'כשכל הפרמטרים זהים ו-α=1, שתי האיזוקלינות זהות לחלוטין וחופפות — מצב מנוון שאינו סביר בטבע (חפיפת נישה מושלמת).'
+      feedback: 'כשכל הפרמטרים זהים ו-α=1, שתי האיזוקלינות חופפות לחלוטין — מצב שאינו סביר בטבע (חפיפת נישה מושלמת).'
     },
     {
       q: 'מתי מתקבל דו-קיום יציב בין שני המינים?',
@@ -434,6 +517,7 @@ renderSiteNav();
 renderSubnav();
 updateNiche();
 updateCompEffect();
+renderIsoStep();
 updateIsocline();
 updateSim();
 initQuiz();
