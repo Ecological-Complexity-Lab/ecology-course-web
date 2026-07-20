@@ -28,7 +28,15 @@ const ECOLOGY_CLASSES = [
       { id: 'p4', label: 'סימולטור ותרגול' },
       { id: 'p5', label: 'בדקו את עצמכם' },
     ] },
-  { num: 4, label: 'רשתות אקולוגיות',         file: 'class-4-scientific-paper.html',     desc: 'קריאת מאמר מדעי ורשתות אינטראקציה אקולוגיות.', ready: false },
+  { num: 4, label: 'רשתות אקולוגיות',         file: 'class-4-networks.html',            desc: 'צמתים, קשתות ומטריצות · סוגי רשתות · כימות מבנה · שרשראות מזון, יציבות ורובוסטיות.', ready: true,
+    topics: [
+      { id: 'p1', label: 'רשתות ומערכות מורכבות' },
+      { id: 'p2', label: 'סוגי רשתות אקולוגיות' },
+      { id: 'p3', label: 'ייצוג ומטריצות' },
+      { id: 'p4', label: 'שרשראות מזון ומיני מפתח' },
+      { id: 'p5', label: 'מבנה, יציבות ורובוסטיות' },
+      { id: 'p6', label: 'תהליכים, רב-שכבתיות וסיכום' },
+    ] },
   { num: 5, label: 'הכנה לסיור',              file: 'class-5-pre-trip.html',              desc: 'הכנה לסיור השדה — שיטות דגימה ותכנון.', ready: false },
   { num: 6, label: 'TIME',                    file: 'class-6-time.html',                 desc: 'דינמיקה בזמן וניתוח סדרות עתיות אקולוגיות.', ready: false },
 ];
