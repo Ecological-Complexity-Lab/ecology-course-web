@@ -43,12 +43,25 @@
   /* trophic cascade bars via chart */
   .cascade-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:.25rem 0 1rem;flex-direction:row-reverse;}
 
-  /* structure metric */
-  .struct-metrics .m-val{font-size:1rem;}
-  /* keep "survived / total" reading left-to-right inside the RTL page */
-  #robAnimals,#robPlants{direction:ltr;}
-  .step-lbl{font-size:.82rem;color:var(--muted);font-weight:600;min-width:150px;text-align:center;font-family:'DM Mono',monospace;}
-  .dia-controls{display:flex;align-items:center;justify-content:center;gap:14px;margin:.85rem 0 .25rem;flex-wrap:wrap;}
+  /* zoo-card Hebrew gloss under the English tag */
+  .zoo-card .zoo-gloss{font-size:.72rem;color:var(--muted);margin:-.25rem 0 .5rem;}
+
+  /* slide toggles for the network builder */
+  .switch-panel{display:flex;flex-direction:column;gap:.55rem;align-items:center;margin:.25rem 0 .75rem;}
+  .switch-row{display:flex;align-items:center;justify-content:center;gap:12px;direction:ltr;}
+  .switch-lbl{font-size:.82rem;color:var(--muted);font-weight:600;width:118px;text-align:center;line-height:1.2;}
+  .switch-lbl small{display:block;font-size:.7rem;font-weight:500;}
+  .switch-lbl.active{color:var(--text);}
+  .switch-lbl.dim{opacity:.4;}
+  .switch{position:relative;display:inline-block;width:46px;height:24px;flex-shrink:0;}
+  .switch input{opacity:0;width:0;height:0;}
+  .slider-sw{position:absolute;inset:0;cursor:pointer;background:#c9c4b8;border-radius:24px;transition:.2s;}
+  .slider-sw:before{content:"";position:absolute;height:18px;width:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;}
+  .switch input:checked + .slider-sw{background:var(--purple);}
+  .switch input:checked + .slider-sw:before{transform:translateX(22px);}
+  .switch input:disabled + .slider-sw{opacity:.35;cursor:not-allowed;}
+  .deg-legend{font-size:.78rem;color:var(--muted);background:var(--bg);border:1px dashed var(--border);border-radius:8px;padding:.6rem .9rem;margin-top:.6rem;line-height:1.75;}
+  .deg-legend b{color:var(--text);}
 
   /* multilayer link banner */
   .mira-banner{display:block;border-radius:12px;padding:1.25rem 1.5rem;background:linear-gradient(135deg,#0f6e56,#534ab7);color:#fff;text-decoration:none;transition:transform .15s,box-shadow .15s;box-shadow:var(--shadow);}
@@ -81,8 +94,7 @@
     <div class="topic-card t2" onclick="showPage('p2')"><div class="topic-num">נושא 2</div><h3>סוגי רשתות אקולוגיות</h3><p>שרשראות מזון, צמח-מאביק, פונדקאי-טפיל, פיזור, קשרים חברתיים ורשת העצים</p></div>
     <div class="topic-card t3" onclick="showPage('p3')"><div class="topic-num">נושא 3</div><h3>ייצוג רשת: צמתים, קשתות ומטריצות</h3><p>חד-צדדית מול דו-צדדית · בינארי/משוקלל · מכוון/לא-מכוון · המטריצה</p></div>
     <div class="topic-card t4" onclick="showPage('p4')"><div class="topic-num">נושא 4</div><h3>שרשראות מזון ומיני מפתח</h3><p>רמות טרופיות · ויסות מלמעלה ומלמטה · מפלים טרופיים · מיני מפתח</p></div>
-    <div class="topic-card t1" onclick="showPage('p5')"><div class="topic-num">נושא 5</div><h3>מבנה, יציבות ורובוסטיות</h3><p>דרגה, קישוריות, מודולריות וקינון · הוויכוח מגוון-יציבות · סימולטור רובוסטיות</p></div>
-    <div class="topic-card t2" onclick="showPage('p6')"><div class="topic-num">נושא 6</div><h3>תהליכים, רב-שכבתיות וסיכום</h3><p>מה קובע את המבנה · רשתות רב-שכבתיות (MiRA) · סיכום ובדקו את עצמכם</p></div>
+    <div class="topic-card t1" onclick="showPage('p5')"><div class="topic-num">נושא 5</div><h3>תהליכים, רב-שכבתיות וסיכום</h3><p>מה קובע את המבנה · רשתות רב-שכבתיות (MiRA) · סיכום ובדקו את עצמכם</p></div>
   </div>
 </div>
 
@@ -101,24 +113,30 @@
 
   <div class="card">
     <h4>שלושת אבני הבניין של רשת</h4>
-    <div class="net-diagram" style="max-width:460px;margin:0 auto;">
-      <svg viewBox="0 0 460 240" role="img" aria-label="רשת עם צמתים וקשתות">
-        <line x1="110" y1="70" x2="230" y2="55" stroke="#0f6e56" stroke-width="3"/>
-        <line x1="110" y1="70" x2="150" y2="170" stroke="#0f6e56" stroke-width="3"/>
-        <line x1="230" y1="55" x2="150" y2="170" stroke="#0f6e56" stroke-width="3"/>
-        <line x1="230" y1="55" x2="340" y2="120" stroke="#0f6e56" stroke-width="3"/>
-        <line x1="340" y1="120" x2="300" y2="200" stroke="#0f6e56" stroke-width="3"/>
-        <line x1="150" y1="170" x2="300" y2="200" stroke="#0f6e56" stroke-width="3"/>
-        <g>
-          <circle cx="110" cy="70" r="20" fill="#cfe9e0" stroke="#0f6e56" stroke-width="2.5"/>
-          <circle cx="230" cy="55" r="20" fill="#cfe9e0" stroke="#0f6e56" stroke-width="2.5"/>
-          <circle cx="340" cy="120" r="20" fill="#cfe9e0" stroke="#0f6e56" stroke-width="2.5"/>
-          <circle cx="150" cy="170" r="20" fill="#cfe9e0" stroke="#0f6e56" stroke-width="2.5"/>
-          <circle cx="300" cy="200" r="20" fill="#cfe9e0" stroke="#0f6e56" stroke-width="2.5"/>
-        </g>
-        <text x="248" y="40" font-size="13" fill="#333">צומת (node)</text>
-        <line x1="255" y1="45" x2="238" y2="52" stroke="#666" stroke-width="1"/>
-        <text x="150" y="118" font-size="13" fill="#993c1d">קשת (link)</text>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem;">רשת קטנה בת ארבעה מינים שונים (הצבע מבדיל בין המינים). כל <em>עיגול</em> הוא צומת, וכל <em>קו</em> ביניהם הוא קשת.</p>
+    <div class="net-diagram" style="max-width:470px;margin:0 auto;">
+      <svg viewBox="0 0 490 250" role="img" aria-label="רשת קטנה עם ארבעה מינים שונים">
+        <!-- edges -->
+        <line x1="105" y1="180" x2="210" y2="80" stroke="#9a9a8e" stroke-width="2.5"/>
+        <line x1="210" y1="80" x2="370" y2="120" stroke="#9a9a8e" stroke-width="2.5"/>
+        <line x1="210" y1="80" x2="285" y2="205" stroke="#9a9a8e" stroke-width="2.5"/>
+        <line x1="370" y1="120" x2="285" y2="205" stroke="#9a9a8e" stroke-width="2.5"/>
+        <!-- nodes (different colors = different species) -->
+        <circle cx="105" cy="180" r="20" fill="#cfe9e0" stroke="#0f6e56" stroke-width="2.5"/>
+        <circle cx="210" cy="80"  r="20" fill="#faeeda" stroke="#ba7517" stroke-width="2.5"/>
+        <circle cx="370" cy="120" r="20" fill="#e3e0f7" stroke="#534ab7" stroke-width="2.5"/>
+        <circle cx="285" cy="205" r="20" fill="#f5d9cf" stroke="#993c1d" stroke-width="2.5"/>
+        <!-- species labels -->
+        <text x="105" y="223" font-size="12" fill="#0f6e56" text-anchor="middle" font-weight="600">צמח</text>
+        <text x="210" y="49"  font-size="12" fill="#ba7517" text-anchor="middle" font-weight="600">חרק</text>
+        <text x="370" y="158" font-size="12" fill="#534ab7" text-anchor="middle" font-weight="600">ציפור</text>
+        <text x="285" y="244" font-size="12" fill="#993c1d" text-anchor="middle" font-weight="600">טורף</text>
+        <!-- node callout -->
+        <text x="472" y="60" font-size="12.5" fill="#333" text-anchor="end">צומת (node)</text>
+        <line x1="412" y1="66" x2="388" y2="105" stroke="#888" stroke-width="1"/>
+        <!-- link callout (kept off the line) -->
+        <text x="300" y="40" font-size="12.5" fill="#333" text-anchor="middle">קשת (link)</text>
+        <line x1="300" y1="47" x2="292" y2="92" stroke="#888" stroke-width="1"/>
       </svg>
     </div>
     <table class="comp-table" style="margin-top:1rem;">
@@ -175,43 +193,49 @@
     <h4>גן-החיות של הרשתות האקולוגיות</h4>
     <div class="zoo-grid">
       <div class="zoo-card">
-        <span class="zoo-tag tag-uni">חד-צדדית · מכוונת</span>
+        <span class="zoo-tag tag-uni">Unipartite · Directed</span>
+        <div class="zoo-gloss">(חד-צדדית · מכוונת)</div>
         <h5>🐟 שרשרת מזון (Food web)</h5>
         <p>תיאור של "מי אוכל את מי" — מתאר את זרימת האנרגיה במערכת.</p>
         <div class="zoo-nodes">צמתים: מינים · קשתות: טריפה</div>
       </div>
       <div class="zoo-card">
-        <span class="zoo-tag tag-bi">דו-צדדית · מוטואליסטית</span>
-        <h5>🌸 צמח–מאביק</h5>
+        <span class="zoo-tag tag-bi">Bipartite · Mutualistic</span>
+        <div class="zoo-gloss">(דו-צדדית · מוטואליסטית)</div>
+        <h5>🌸 צמח–מאביק (Plant–pollinator)</h5>
         <p>שתי קבוצות: צמחים ומאביקים. אינטראקציה חיובית לשני הצדדים.</p>
         <div class="zoo-nodes">צמתים: צמחים, מאביקים · קשתות: תדירות ביקורים</div>
       </div>
       <div class="zoo-card">
-        <span class="zoo-tag tag-bi">דו-צדדית · אנטגוניסטית</span>
-        <h5>🦟 פונדקאי–טפיל</h5>
+        <span class="zoo-tag tag-bi">Bipartite · Antagonistic</span>
+        <div class="zoo-gloss">(דו-צדדית · אנטגוניסטית)</div>
+        <h5>🦟 פונדקאי–טפיל (Host–parasite)</h5>
         <p>שתי קבוצות: פונדקאים וטפילים. אינטראקציה שלילית לפונדקאי.</p>
         <div class="zoo-nodes">צמתים: פונדקאים, טפילים · קשתות: עומס/שכיחות טפיל</div>
       </div>
       <div class="zoo-card">
-        <span class="zoo-tag tag-uni">חד-צדדית</span>
+        <span class="zoo-tag tag-uni">Unipartite</span>
+        <div class="zoo-gloss">(חד-צדדית)</div>
         <h5>🌱 פיזור זרעים (Dispersal)</h5>
         <p>תנועת פרטים או זרעים בין כתמי בית-גידול במרחב.</p>
         <div class="zoo-nodes">צמתים: כתמים · קשתות: פיזור בין כתמים</div>
       </div>
       <div class="zoo-card">
-        <span class="zoo-tag tag-uni">חד-צדדית</span>
-        <h5>🐘 קשרים חברתיים</h5>
+        <span class="zoo-tag tag-uni">Unipartite</span>
+        <div class="zoo-gloss">(חד-צדדית)</div>
+        <h5>🐘 קשרים חברתיים (Social)</h5>
         <p>מי נמצא בקרבת מי, מי מטפח את מי — בסיס להעברת מחלות ומידע.</p>
         <div class="zoo-nodes">צמתים: פרטים · קשתות: מגע/קרבה חברתית</div>
       </div>
       <div class="zoo-card">
-        <span class="zoo-tag tag-uni">חד-צדדית</span>
+        <span class="zoo-tag tag-uni">Unipartite</span>
+        <div class="zoo-gloss">(חד-צדדית)</div>
         <h5>🌳 רשת העצים (Wood-wide web)</h5>
         <p>עצים המחוברים דרך רשת פטריות מיקוריזה, שדרכה עוברים סוכרים ואיתותים.</p>
         <div class="zoo-nodes">צמתים: עצים · קשתות: חיבור מיקוריזלי</div>
       </div>
     </div>
-    <div class="explain">שים לב: חלק מהרשתות הן <strong>חד-צדדיות</strong> (unipartite) — כל הצמתים מאותו סוג ויכולים להתחבר זה לזה; ואחרות <strong>דו-צדדיות</strong> (bipartite) — שתי קבוצות נפרדות, וקשתות קיימות רק <em>בין</em> הקבוצות. בנושא הבא נראה בדיוק מה ההבדל.</div>
+    <div class="explain">שים לב: חלק מהרשתות הן <strong>Unipartite</strong> (חד-צדדיות) — כל הצמתים מאותו סוג ויכולים להתחבר זה לזה; ואחרות <strong>Bipartite</strong> (דו-צדדיות) — שתי קבוצות נפרדות, וקשתות קיימות רק <em>בין</em> הקבוצות. בנושא הבא נראה בדיוק מה ההבדל.</div>
   </div>
 
   <div class="card">
@@ -245,36 +269,48 @@
     <table class="comp-table">
       <thead><tr><th>מאפיין</th><th>אפשרות א'</th><th>אפשרות ב'</th></tr></thead>
       <tbody>
-        <tr><td><strong>ערך הקשת</strong></td><td><strong>בינארי</strong> — קיים/לא קיים (a<sub>ij</sub> ∈ {0,1})</td><td><strong>משוקלל</strong> — לקשת יש עוצמה (מספר ביקורים, כמות אנרגיה)</td></tr>
-        <tr><td><strong>כיווניות</strong></td><td><strong>לא-מכוון</strong> — הקשר סימטרי (a<sub>ij</sub> = a<sub>ji</sub>)</td><td><strong>מכוון</strong> — לקשר יש כיוון (טורף→טרף)</td></tr>
-        <tr><td><strong>סוג הצמתים</strong></td><td><strong>חד-צדדית</strong> — קבוצה אחת של צמתים</td><td><strong>דו-צדדית</strong> — שתי קבוצות נפרדות</td></tr>
+        <tr><td><strong>ערך הקשת</strong><br>Edge value</td><td><strong>בינארי (Binary)</strong> — קיים/לא קיים (a<sub>ij</sub> ∈ {0,1})</td><td><strong>משוקלל (Weighted)</strong> — לקשת יש עוצמה (מספר ביקורים, כמות אנרגיה)</td></tr>
+        <tr><td><strong>כיווניות</strong><br>Direction</td><td><strong>לא-מכוון (Undirected)</strong> — הקשר סימטרי (a<sub>ij</sub> = a<sub>ji</sub>)</td><td><strong>מכוון (Directed)</strong> — לקשר יש כיוון (טורף→טרף)</td></tr>
+        <tr><td><strong>סוג הצמתים</strong><br>Node sets</td><td><strong>חד-צדדית (Unipartite)</strong> — קבוצה אחת של צמתים</td><td><strong>דו-צדדית (Bipartite)</strong> — שתי קבוצות נפרדות</td></tr>
       </tbody>
     </table>
   </div>
 
   <div class="card">
     <h4>לומדה: רשת ⇄ מטריצה</h4>
-    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem;">לחצו על תאי המטריצה כדי להוסיף או להסיר קשתות — הרשת מצוירת מחדש בזמן אמת. שנו את המאפיינים למעלה וראו כיצד משתנים המטריצה, הצורה של הרשת ומדדי הדרגה.</p>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem;">לחצו על תאי המטריצה כדי להוסיף או להסיר קשתות — הרשת מצוירת מחדש בזמן אמת. הזיזו את המתגים וראו כיצד משתנים המטריצה, הרשת ומדדי הדרגה.</p>
 
-    <div class="toggle-row">
-      <button class="btn secondary" id="tgDir" onclick="toggleNetOpt('directed')">לא-מכוון</button>
-      <button class="btn secondary" id="tgW" onclick="toggleNetOpt('weighted')">בינארי</button>
-      <button class="btn secondary" onclick="loadNetPreset('star')">כוכב (star)</button>
-      <button class="btn secondary" onclick="loadNetPreset('chain')">שרשרת</button>
-      <button class="btn" onclick="loadNetPreset('clear')">↺ ניקוי</button>
+    <div class="switch-panel">
+      <div class="switch-row">
+        <span class="switch-lbl active" id="lblUni">Unipartite<small>חד-צדדית</small></span>
+        <label class="switch"><input type="checkbox" id="swBi" onchange="setPartite(this.checked)"><span class="slider-sw"></span></label>
+        <span class="switch-lbl" id="lblBi">Bipartite<small>דו-צדדית</small></span>
+      </div>
+      <div class="switch-row">
+        <span class="switch-lbl active" id="lblBin">Binary<small>בינארי</small></span>
+        <label class="switch"><input type="checkbox" id="swW" onchange="setWeighted(this.checked)"><span class="slider-sw"></span></label>
+        <span class="switch-lbl" id="lblW">Weighted<small>משוקלל</small></span>
+      </div>
+      <div class="switch-row">
+        <span class="switch-lbl active" id="lblUndir">Undirected<small>לא-מכוון</small></span>
+        <label class="switch"><input type="checkbox" id="swDir" onchange="setDirected(this.checked)"><span class="slider-sw"></span></label>
+        <span class="switch-lbl" id="lblDir">Directed<small>מכוון</small></span>
+      </div>
     </div>
+    <div style="text-align:center;margin-bottom:1rem;"><button class="btn secondary" onclick="resetNet()">↺ טען דוגמה מחדש</button></div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;" class="netmat-grid">
       <div class="net-diagram">
-        <svg id="netSvg" viewBox="0 0 260 260" role="img" aria-label="רשת חד-צדדית אינטראקטיבית"></svg>
+        <svg id="netSvg" viewBox="0 0 280 240" role="img" aria-label="רשת אינטראקטיבית"></svg>
       </div>
       <div class="adj-wrap">
         <table class="adj" id="adjTable"></table>
-        <div style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:.5rem;">שורה i → עמודה j &nbsp;·&nbsp; לחצו על תא לשינוי</div>
+        <div id="adjHint" style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:.5rem;"></div>
       </div>
     </div>
 
     <div class="deg-list" id="degList"></div>
+    <div class="deg-legend" id="degLegend"></div>
     <div class="explain" id="netExplain"></div>
   </div>
 
@@ -375,124 +411,9 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- TOPIC 5 — quantifying structure, stability, robustness -->
+<!-- TOPIC 5 — processes, multilayer, summary, quiz -->
 <!-- ============================================================ -->
 <div id="p5" class="page">
-  <div class="sec-header anim">
-    <div class="sec-dot teal">📊</div>
-    <div><div class="sec-title">מבנה, יציבות ורובוסטיות</div><div class="sec-sub">כימות מבנה · מגוון מול יציבות · סימולטור רובוסטיות</div></div>
-  </div>
-
-  <div class="info-box teal">
-    אחרי שיודעים לצייר רשת, השאלה היא איך <em>למדוד</em> את המבנה שלה — ואיך המבנה הזה משפיע על <strong>יציבות</strong> ו<strong>תפקוד</strong>. מכמתים את המבנה בשלושה מוקדי-הגדלה.
-  </div>
-
-  <div class="card">
-    <h4>שלוש רמות של כימות מבנה</h4>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;" class="dia-3">
-      <div class="info-box teal" style="margin:0"><strong>רמת הצומת</strong><br><em>דרגה</em> (Degree) — מספר הקשתות של צומת; <em>מרכזיוּת</em> (Centrality) — עד כמה הצומת "מרכזי" ברשת.</div>
-      <div class="info-box purple" style="margin:0"><strong>רמת הביניים (Mesoscale)</strong><br><em>מוטיבים</em> — תבניות חיבור חוזרות; <em>מודולריוּת</em> — חלוקה לאשכולות.</div>
-      <div class="info-box amber" style="margin:0"><strong>רמת הרשת</strong><br>מספר צמתים וקשתות; <em>קישוריות</em> (Connectance); <em>קינון</em> (Nestedness).</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h4>מחשבון: דרגה וקישוריות</h4>
-    <p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem;"><strong>קישוריות (Connectance)</strong> = שבר הקשתות שמומשו מתוך כל הקשתות האפשריות. זהו מדד רמת-רשת בסיסי לצפיפות האינטראקציות. שנו את מספר הצמתים והקשתות:</p>
-    <div class="control-row"><label>מספר צמתים (S)</label><input type="range" id="cnS" min="3" max="20" value="8" oninput="updateConnectance()"><span class="val-badge" id="cnSval">8</span></div>
-    <div class="control-row"><label>מספר קשתות (L)</label><input type="range" id="cnL" min="1" max="190" value="12" oninput="updateConnectance()"><span class="val-badge" id="cnLval">12</span></div>
-    <div class="metrics-row struct-metrics" style="margin-top:1rem;">
-      <div class="metric"><div class="m-label">קשתות אפשריות (S·(S−1)/2)</div><div class="m-val teal" id="cnMax">—</div></div>
-      <div class="metric"><div class="m-label">קישוריות C = L / max</div><div class="m-val coral" id="cnC">—</div></div>
-      <div class="metric"><div class="m-label">דרגה ממוצעת ⟨k⟩ = 2L/S</div><div class="m-val purple" id="cnK">—</div></div>
-    </div>
-    <div class="explain" id="cnExplain"></div>
-  </div>
-
-  <div class="card">
-    <h4>שני מבנים אופייניים לרשתות מוטואליסטיות: קינון ומודולריות</h4>
-    <div class="dia-2col">
-      <figure style="margin:0">
-        <div class="net-diagram" style="display:flex;justify-content:center;">
-          <svg viewBox="0 0 190 160" role="img" aria-label="מטריצה מקוננת">
-            <g id="nestedMat"></g>
-            <text x="95" y="152" font-size="11" fill="#0f6e56" text-anchor="middle" font-weight="600">קינון (Nested)</text>
-          </svg>
-        </div>
-        <figcaption>ספציאליסטים מקיימים אינטראקציה עם תת-קבוצה של שותפי הגנרליסטים</figcaption>
-      </figure>
-      <figure style="margin:0">
-        <div class="net-diagram" style="display:flex;justify-content:center;">
-          <svg viewBox="0 0 190 160" role="img" aria-label="מטריצה מודולרית">
-            <g id="modularMat"></g>
-            <text x="95" y="152" font-size="11" fill="#534ab7" text-anchor="middle" font-weight="600">מודולריות (Modular)</text>
-          </svg>
-        </div>
-        <figcaption>הרשת מתחלקת לאשכולות שבתוכם צפיפות אינטראקציות גבוהה</figcaption>
-      </figure>
-    </div>
-    <div class="explain"><strong>מודולריות</strong> מזהה אשכולות (מודולים) של צמתים שמתנהגים דומה — היא מפשטת מורכבות, חושפת תהליכים (מרחב, פילוגניה) ובעלת משמעות תפקודית. <strong>קינון</strong> מתאר מבנה שבו הספציאליסטים "מקוננים" בתוך האינטראקציות של הגנרליסטים.</div>
-  </div>
-
-  <div class="card">
-    <h4>הוויכוח הגדול: האם מגוון מגדיל יציבות?</h4>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;" class="dia-3">
-      <div class="info-box teal" style="margin:0"><strong>ההשערה האינטואיטיבית</strong><br>מגוון גבוה יותר → יותר מסלולים חלופיים → יציבות גבוהה יותר.</div>
-      <div class="info-box amber" style="margin:0"><strong>התיאוריה (May 1972)</strong><br>מטריצה אקראית + ניתוח יציבות לינארי של מערכת גדולה.</div>
-      <div class="info-box coral" style="margin:0"><strong>התוצאה המפתיעה</strong><br>ברשתות אקראיות, מגוון גבוה דווקא <em>מקטין</em> את היציבות!</div>
-    </div>
-    <div class="explain">הפרדוקס של מיי (May's paradox) הצית עשורים של מחקר: אם מערכות מגוונות אמורות להיות פחות יציבות בתיאוריה — מדוע חברות עשירות-מינים שורדות בטבע? התשובה טמונה ב<em>מבנה</em>: לא כל רשת היא אקראית. מבנים מסוימים (למשל מודולריות וקינון) יכולים להחזיר יציבות. <span style="color:var(--muted)">(May 1972; Allesina & Tang 2015)</span></div>
-  </div>
-
-  <div class="card">
-    <h4>מבנה מודולרי מאט הפרעות</h4>
-    <p style="font-size:.9rem;line-height:1.7;">כשמידבק (או הפרעה) חודר לרשת מודולרית, קל לו להתפשט <em>בתוך</em> המודול אבל קשה לו לקפוץ בין מודולים — כך שהמבנה מאט את ההתפשטות. בעטלפים (<em>Nyctalus lasiopterus</em>) שהתקבצו בעצי מגורים, נמצא שרשת המגע האמיתית (המודולרית) האטה את זמן ההדבקה בהשוואה לרשת אקראית. <span style="color:var(--muted)">(Fortuna et al. 2009)</span> — זו דוגמה ישירה לקשר <strong>מבנה ← תפקוד</strong>.</p>
-  </div>
-
-  <div class="card">
-    <h4>לומדה: רובוסטיות הרשת להכחדות</h4>
-    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem;">ברשת דו-צדדית של מאביקים (מעגלים כתומים) וצמחים (ריבועים ירוקים): כשמסירים מאביק, צמח שאיבד את <em>כל</em> המאביקים שלו נכחד גם הוא (<strong>הכחדה משנית</strong>). כמה עמידה הרשת? זה תלוי ב<em>סדר ההסרה</em>. גררו את המחוון והשוו בין האסטרטגיות.</p>
-
-    <div class="toggle-row">
-      <button class="btn secondary robust-strat active" data-strat="random" onclick="setRobustStrat('random')">אקראי</button>
-      <button class="btn secondary robust-strat" data-strat="most" onclick="setRobustStrat('most')">מהמקושר ביותר</button>
-      <button class="btn secondary robust-strat" data-strat="least" onclick="setRobustStrat('least')">מהמקושר פחות</button>
-    </div>
-
-    <div class="control-row"><label>מאביקים שהוסרו</label><input type="range" id="robK" min="0" max="6" value="0" oninput="updateRobust()"><span class="val-badge" id="robKval">0</span></div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;" class="netmat-grid">
-      <div class="net-diagram">
-        <svg id="robSvg" viewBox="0 0 300 230" role="img" aria-label="רשת דו-צדדית מאביקים-צמחים עם הכחדות"></svg>
-      </div>
-      <div>
-        <div class="chart-wrap" style="height:230px;"><canvas id="robustChart" role="img" aria-label="עקומת רובוסטיות"></canvas></div>
-      </div>
-    </div>
-
-    <div class="metrics-row" style="margin-top:1rem;">
-      <div class="metric"><div class="m-label">מאביקים שרדו</div><div class="m-val amber" id="robAnimals">6 / 6</div></div>
-      <div class="metric"><div class="m-label">צמחים שרדו</div><div class="m-val teal" id="robPlants">5 / 5</div></div>
-    </div>
-    <div class="explain" id="robExplain"></div>
-  </div>
-
-  <div class="card">
-    <h4>מה קובע את הרובוסטיות?</h4>
-    <ul style="font-size:.88rem;line-height:1.85;padding-inline-start:1.2rem;">
-      <li><strong>סדר ההסרה</strong> — הסרה אקראית מול הסרה ממוקדת של הצמתים המקושרים ביותר.</li>
-      <li><strong>מבנה הרשת</strong> — קינון וקישוריות מספקים "גיבוי" של שותפים חלופיים.</li>
-      <li><strong>התנהגות המינים — חיווט מחדש (rewiring)</strong> — מין שאיבד שותף עשוי לעבור לשותף אחר.</li>
-      <li><strong>דינמיקה בזמן</strong> — הרשת אינה קפואה; קשתות מופיעות ונעלמות בין עונות.</li>
-    </ul>
-    <div class="explain">המודל שבלומדה מניח הכחדה מיידית וללא חיווט מחדש — הוא <em>פשטני</em> בכוונה. בטבע החיווט מחדש והדינמיקה בזמן יכולים להפוך רשת לעמידה בהרבה. עצם הנחות המודל היא שאלה מחקרית: "האם זה מודל מציאותי?"</div>
-  </div>
-</div>
-
-<!-- ============================================================ -->
-<!-- TOPIC 6 — processes, multilayer, summary, quiz -->
-<!-- ============================================================ -->
-<div id="p6" class="page">
   <div class="sec-header anim">
     <div class="sec-dot purple">🧩</div>
     <div><div class="sec-title">תהליכים, רב-שכבתיות וסיכום</div><div class="sec-sub">מה יוצר את המבנה · רשתות רב-שכבתיות · סיכום ובדיקה עצמית</div></div>
@@ -553,7 +474,7 @@
   <div class="card">
     <h4>סיכום — אקולוגיית רשתות בשלוש שאלות</h4>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;" class="dia-3">
-      <div class="info-box teal" style="margin:0"><strong>1. לכמת מבנה</strong><br>מהם הדרגה, הקישוריות, המודולריות והקינון של הרשת?</div>
+      <div class="info-box teal" style="margin:0"><strong>1. לכמת מבנה</strong><br>כמה מחובר כל צומת (דרגה), וכיצד מסודרות הקשתות ברשת?</div>
       <div class="info-box amber" style="margin:0"><strong>2. לקשר ליציבות ותפקוד</strong><br>כיצד המבנה משפיע על עמידות המערכת, על האבקה או על התפשטות מחלות?</div>
       <div class="info-box purple" style="margin:0"><strong>3. להבין תהליכים</strong><br>אילו תהליכים אקולוגיים ואבולוציוניים יצרו את המבנה הזה?</div>
     </div>
@@ -569,6 +490,6 @@
 </div>
 
 <script src="js/common.js?v=2"></script>
-<script src="js/class-4-networks.js?v=1"></script>
+<script src="js/class-4-networks.js?v=2"></script>
 </body>
 </html>
