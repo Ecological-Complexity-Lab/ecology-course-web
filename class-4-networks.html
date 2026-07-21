@@ -40,26 +40,17 @@
   .deg-chip{font-size:.78rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-family:'DM Mono',monospace;}
   .toggle-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:.5rem 0 1rem;flex-direction:row-reverse;}
 
-  /* trophic cascade bars via chart */
-  .cascade-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:.25rem 0 1rem;flex-direction:row-reverse;}
-
   /* zoo-card Hebrew gloss under the English tag */
   .zoo-card .zoo-gloss{font-size:.72rem;color:var(--muted);margin:-.25rem 0 .5rem;}
 
-  /* slide toggles for the network builder */
-  .switch-panel{display:flex;flex-direction:column;gap:.55rem;align-items:center;margin:.25rem 0 .75rem;}
-  .switch-row{display:flex;align-items:center;justify-content:center;gap:12px;direction:ltr;}
-  .switch-lbl{font-size:.82rem;color:var(--muted);font-weight:600;width:118px;text-align:center;line-height:1.2;}
-  .switch-lbl small{display:block;font-size:.7rem;font-weight:500;}
-  .switch-lbl.active{color:var(--text);}
-  .switch-lbl.dim{opacity:.4;}
-  .switch{position:relative;display:inline-block;width:46px;height:24px;flex-shrink:0;}
-  .switch input{opacity:0;width:0;height:0;}
-  .slider-sw{position:absolute;inset:0;cursor:pointer;background:#c9c4b8;border-radius:24px;transition:.2s;}
-  .slider-sw:before{content:"";position:absolute;height:18px;width:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;}
-  .switch input:checked + .slider-sw{background:var(--purple);}
-  .switch input:checked + .slider-sw:before{transform:translateX(22px);}
-  .switch input:disabled + .slider-sw{opacity:.35;cursor:not-allowed;}
+  /* dropdown controls for the network builder */
+  .dd-panel{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:.25rem 0 .9rem;}
+  .dd-field{display:flex;flex-direction:column;gap:4px;}
+  .dd-lbl{font-size:.72rem;color:var(--muted);font-weight:600;text-align:center;}
+  .dd-field select{font-family:'Heebo',sans-serif;font-size:.85rem;color:var(--text);background:var(--card);border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;cursor:pointer;min-width:180px;text-align:center;transition:border-color .15s;}
+  .dd-field select:hover{border-color:var(--purple);}
+  .dd-field select:focus{outline:none;border-color:var(--purple);}
+  .dd-field select:disabled{opacity:.45;cursor:not-allowed;background:var(--bg);}
   .deg-legend{font-size:.78rem;color:var(--muted);background:var(--bg);border:1px dashed var(--border);border-radius:8px;padding:.6rem .9rem;margin-top:.6rem;line-height:1.75;}
   .deg-legend b{color:var(--text);}
 
@@ -93,8 +84,7 @@
     <div class="topic-card t1" onclick="showPage('p1')"><div class="topic-num">נושא 1</div><h3>רשתות ומערכות מורכבות</h3><p>צמתים, קשתות ומבנה · מה מייצגות רשתות אקולוגיות · מערכות אדפטיביות מורכבות</p></div>
     <div class="topic-card t2" onclick="showPage('p2')"><div class="topic-num">נושא 2</div><h3>סוגי רשתות אקולוגיות</h3><p>שרשראות מזון, צמח-מאביק, פונדקאי-טפיל, פיזור, קשרים חברתיים ורשת העצים</p></div>
     <div class="topic-card t3" onclick="showPage('p3')"><div class="topic-num">נושא 3</div><h3>ייצוג רשת: צמתים, קשתות ומטריצות</h3><p>חד-צדדית מול דו-צדדית · בינארי/משוקלל · מכוון/לא-מכוון · המטריצה</p></div>
-    <div class="topic-card t4" onclick="showPage('p4')"><div class="topic-num">נושא 4</div><h3>שרשראות מזון ומיני מפתח</h3><p>רמות טרופיות · ויסות מלמעלה ומלמטה · מפלים טרופיים · מיני מפתח</p></div>
-    <div class="topic-card t1" onclick="showPage('p5')"><div class="topic-num">נושא 5</div><h3>תהליכים, רב-שכבתיות וסיכום</h3><p>מה קובע את המבנה · רשתות רב-שכבתיות (MiRA) · סיכום ובדקו את עצמכם</p></div>
+    <div class="topic-card t4" onclick="showPage('p4')"><div class="topic-num">נושא 4</div><h3>תהליכים, רב-שכבתיות וסיכום</h3><p>מה קובע את המבנה · רשתות רב-שכבתיות (MiRA) · סיכום ובדקו את עצמכם</p></div>
   </div>
 </div>
 
@@ -113,30 +103,28 @@
 
   <div class="card">
     <h4>שלושת אבני הבניין של רשת</h4>
-    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem;">רשת קטנה בת ארבעה מינים שונים (הצבע מבדיל בין המינים). כל <em>עיגול</em> הוא צומת, וכל <em>קו</em> ביניהם הוא קשת.</p>
-    <div class="net-diagram" style="max-width:470px;margin:0 auto;">
-      <svg viewBox="0 0 490 250" role="img" aria-label="רשת קטנה עם ארבעה מינים שונים">
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem;">רשת קטנה: כל <em>עיגול</em> הוא צומת (למשל מין), וכל <em>קו</em> ביניהם הוא קשת (אינטראקציה). הצבעים מבחינים בין מינים — חלקם עשויים לחלוק צבע.</p>
+    <div class="net-diagram" style="max-width:440px;margin:0 auto;">
+      <svg viewBox="0 0 460 240" role="img" aria-label="רשת קטנה של צמתים וקשתות">
         <!-- edges -->
-        <line x1="105" y1="180" x2="210" y2="80" stroke="#9a9a8e" stroke-width="2.5"/>
-        <line x1="210" y1="80" x2="370" y2="120" stroke="#9a9a8e" stroke-width="2.5"/>
-        <line x1="210" y1="80" x2="285" y2="205" stroke="#9a9a8e" stroke-width="2.5"/>
-        <line x1="370" y1="120" x2="285" y2="205" stroke="#9a9a8e" stroke-width="2.5"/>
-        <!-- nodes (different colors = different species) -->
-        <circle cx="105" cy="180" r="20" fill="#cfe9e0" stroke="#0f6e56" stroke-width="2.5"/>
-        <circle cx="210" cy="80"  r="20" fill="#faeeda" stroke="#ba7517" stroke-width="2.5"/>
-        <circle cx="370" cy="120" r="20" fill="#e3e0f7" stroke="#534ab7" stroke-width="2.5"/>
-        <circle cx="285" cy="205" r="20" fill="#f5d9cf" stroke="#993c1d" stroke-width="2.5"/>
-        <!-- species labels -->
-        <text x="105" y="223" font-size="12" fill="#0f6e56" text-anchor="middle" font-weight="600">צמח</text>
-        <text x="210" y="49"  font-size="12" fill="#ba7517" text-anchor="middle" font-weight="600">חרק</text>
-        <text x="370" y="158" font-size="12" fill="#534ab7" text-anchor="middle" font-weight="600">ציפור</text>
-        <text x="285" y="244" font-size="12" fill="#993c1d" text-anchor="middle" font-weight="600">טורף</text>
+        <line x1="105" y1="80"  x2="230" y2="60"  stroke="#9a9a8e" stroke-width="2.5"/>
+        <line x1="230" y1="60"  x2="355" y2="110" stroke="#9a9a8e" stroke-width="2.5"/>
+        <line x1="355" y1="110" x2="300" y2="195" stroke="#9a9a8e" stroke-width="2.5"/>
+        <line x1="300" y1="195" x2="140" y2="190" stroke="#9a9a8e" stroke-width="2.5"/>
+        <line x1="105" y1="80"  x2="140" y2="190" stroke="#9a9a8e" stroke-width="2.5"/>
+        <line x1="230" y1="60"  x2="300" y2="195" stroke="#9a9a8e" stroke-width="2.5"/>
+        <!-- nodes (some share a color) -->
+        <circle cx="105" cy="80"  r="20" fill="#cfe9e0" stroke="#0f6e56" stroke-width="2.5"/>
+        <circle cx="230" cy="60"  r="20" fill="#faeeda" stroke="#ba7517" stroke-width="2.5"/>
+        <circle cx="355" cy="110" r="20" fill="#cfe9e0" stroke="#0f6e56" stroke-width="2.5"/>
+        <circle cx="300" cy="195" r="20" fill="#e3e0f7" stroke="#534ab7" stroke-width="2.5"/>
+        <circle cx="140" cy="190" r="20" fill="#faeeda" stroke="#ba7517" stroke-width="2.5"/>
         <!-- node callout -->
-        <text x="472" y="60" font-size="12.5" fill="#333" text-anchor="end">צומת (node)</text>
-        <line x1="412" y1="66" x2="388" y2="105" stroke="#888" stroke-width="1"/>
+        <text x="452" y="72" font-size="12.5" fill="#333" text-anchor="end">צומת (node)</text>
+        <line x1="402" y1="78" x2="374" y2="102" stroke="#888" stroke-width="1"/>
         <!-- link callout (kept off the line) -->
-        <text x="300" y="40" font-size="12.5" fill="#333" text-anchor="middle">קשת (link)</text>
-        <line x1="300" y1="47" x2="292" y2="92" stroke="#888" stroke-width="1"/>
+        <text x="292" y="30" font-size="12.5" fill="#333" text-anchor="middle">קשת (link)</text>
+        <line x1="292" y1="37" x2="288" y2="78" stroke="#888" stroke-width="1"/>
       </svg>
     </div>
     <table class="comp-table" style="margin-top:1rem;">
@@ -278,24 +266,30 @@
 
   <div class="card">
     <h4>לומדה: רשת ⇄ מטריצה</h4>
-    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem;">לחצו על תאי המטריצה כדי להוסיף או להסיר קשתות — הרשת מצוירת מחדש בזמן אמת. הזיזו את המתגים וראו כיצד משתנים המטריצה, הרשת ומדדי הדרגה.</p>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem;">לחצו על תאי המטריצה כדי להוסיף או להסיר קשתות — הרשת מצוירת מחדש בזמן אמת. בחרו את סוג הרשת מהתפריטים וראו כיצד משתנים המטריצה, הרשת ומדדי הדרגה.</p>
 
-    <div class="switch-panel">
-      <div class="switch-row">
-        <span class="switch-lbl active" id="lblUni">Unipartite<small>חד-צדדית</small></span>
-        <label class="switch"><input type="checkbox" id="swBi" onchange="setPartite(this.checked)"><span class="slider-sw"></span></label>
-        <span class="switch-lbl" id="lblBi">Bipartite<small>דו-צדדית</small></span>
-      </div>
-      <div class="switch-row">
-        <span class="switch-lbl active" id="lblBin">Binary<small>בינארי</small></span>
-        <label class="switch"><input type="checkbox" id="swW" onchange="setWeighted(this.checked)"><span class="slider-sw"></span></label>
-        <span class="switch-lbl" id="lblW">Weighted<small>משוקלל</small></span>
-      </div>
-      <div class="switch-row">
-        <span class="switch-lbl active" id="lblUndir">Undirected<small>לא-מכוון</small></span>
-        <label class="switch"><input type="checkbox" id="swDir" onchange="setDirected(this.checked)"><span class="slider-sw"></span></label>
-        <span class="switch-lbl" id="lblDir">Directed<small>מכוון</small></span>
-      </div>
+    <div class="dd-panel">
+      <label class="dd-field">
+        <span class="dd-lbl">מבנה · Structure</span>
+        <select id="selPartite" onchange="setPartite(this.value==='bi')">
+          <option value="uni">Unipartite · חד-צדדית</option>
+          <option value="bi">Bipartite · דו-צדדית</option>
+        </select>
+      </label>
+      <label class="dd-field">
+        <span class="dd-lbl">ערך הקשת · Edge value</span>
+        <select id="selWeight" onchange="setWeighted(this.value==='w')">
+          <option value="b">Binary · בינארי</option>
+          <option value="w">Weighted · משוקלל</option>
+        </select>
+      </label>
+      <label class="dd-field">
+        <span class="dd-lbl">כיווניות · Direction</span>
+        <select id="selDir" onchange="setDirected(this.value==='dir')">
+          <option value="undir">Undirected · לא-מכוון</option>
+          <option value="dir">Directed · מכוון</option>
+        </select>
+      </label>
     </div>
     <div style="text-align:center;margin-bottom:1rem;"><button class="btn secondary" onclick="resetNet()">↺ טען דוגמה מחדש</button></div>
 
@@ -313,107 +307,12 @@
     <div class="deg-legend" id="degLegend"></div>
     <div class="explain" id="netExplain"></div>
   </div>
-
-  <div class="card">
-    <h4>רשת דו-צדדית (Bipartite) — מטריצת שכיחות (Incidence)</h4>
-    <p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem;">בְּרשת דו-צדדית יש <em>שתי קבוצות נפרדות</em> של צמתים, וקשתות קיימות רק בין הקבוצות (למשל צמחים ↔ מאביקים) — אף פעם לא בתוך אותה קבוצה. לכן משתמשים במטריצת שכיחות מלבנית בגודל M×N.</p>
-    <div class="dia-2col">
-      <figure style="margin:0">
-        <div class="net-diagram">
-          <svg viewBox="0 0 300 220" role="img" aria-label="רשת דו-צדדית צמח-מאביק">
-            <!-- animals (top) -->
-            <line x1="70" y1="55" x2="70" y2="165" stroke="#999" stroke-width="2"/>
-            <line x1="70" y1="55" x2="150" y2="165" stroke="#999" stroke-width="2"/>
-            <line x1="150" y1="55" x2="150" y2="165" stroke="#999" stroke-width="2"/>
-            <line x1="150" y1="55" x2="230" y2="165" stroke="#999" stroke-width="2"/>
-            <line x1="230" y1="55" x2="150" y2="165" stroke="#999" stroke-width="2"/>
-            <circle cx="70" cy="55" r="16" fill="#faeeda" stroke="#ba7517" stroke-width="2.5"/>
-            <circle cx="150" cy="55" r="16" fill="#faeeda" stroke="#ba7517" stroke-width="2.5"/>
-            <circle cx="230" cy="55" r="16" fill="#faeeda" stroke="#ba7517" stroke-width="2.5"/>
-            <rect x="56" y="151" width="28" height="28" rx="4" fill="#e1f5ee" stroke="#0f6e56" stroke-width="2.5"/>
-            <rect x="136" y="151" width="28" height="28" rx="4" fill="#e1f5ee" stroke="#0f6e56" stroke-width="2.5"/>
-            <rect x="216" y="151" width="28" height="28" rx="4" fill="#e1f5ee" stroke="#0f6e56" stroke-width="2.5"/>
-            <text x="150" y="28" font-size="12" fill="#ba7517" text-anchor="middle" font-weight="600">מאביקים</text>
-            <text x="150" y="208" font-size="12" fill="#0f6e56" text-anchor="middle" font-weight="600">צמחים</text>
-          </svg>
-        </div>
-        <figcaption>קבוצות נפרדות; קשתות רק ביניהן</figcaption>
-      </figure>
-      <figure style="margin:0">
-        <div class="net-diagram" style="display:flex;align-items:center;justify-content:center;min-height:150px;">
-          <table class="adj" style="direction:ltr;">
-            <thead><tr><th></th><th>צמח1</th><th>צמח2</th><th>צמח3</th></tr></thead>
-            <tbody>
-              <tr><th>מאביק1</th><td class="cell on">1</td><td class="cell on">1</td><td class="cell off">0</td></tr>
-              <tr><th>מאביק2</th><td class="cell off">0</td><td class="cell on">1</td><td class="cell off">0</td></tr>
-              <tr><th>מאביק3</th><td class="cell off">0</td><td class="cell on">1</td><td class="cell on">1</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <figcaption>מטריצת שכיחות M×N (שורות ≠ עמודות)</figcaption>
-      </figure>
-    </div>
-    <div class="explain">שאלות לדוגמה שנשאלות על רשתות דו-צדדיות: האם יש <em>אסימטריה</em> באינטראקציות ההדדיות? כיצד המבנה משתנה לאורך גרדיאנט סביבתי? כיצד חסינות הפונדקאי מעצבת את מבנה רשת הטפילים, ומה זה אומר על סיכון להתפרצות מחלה?</div>
-  </div>
 </div>
 
 <!-- ============================================================ -->
-<!-- TOPIC 4 — food webs, cascades, keystone -->
+<!-- TOPIC 4 — processes, multilayer, summary, quiz -->
 <!-- ============================================================ -->
 <div id="p4" class="page">
-  <div class="sec-header anim">
-    <div class="sec-dot coral">🐺</div>
-    <div><div class="sec-title">שרשראות מזון ומיני מפתח</div><div class="sec-sub">רמות טרופיות · ויסות · מפלים טרופיים · מיני מפתח</div></div>
-  </div>
-
-  <div class="info-box coral">
-    <strong>שרשרת מזון</strong> היא רשת חד-צדדית ומכוונת המתארת "מי אוכל את מי" ואת זרימת האנרגיה מהבסיס כלפי מעלה. היא הדוגמה הקלאסית ביותר לרשת אקולוגית, ומרכזת בתוכה כמה מהמושגים החשובים באקולוגיה של חברות.
-  </div>
-
-  <div class="card">
-    <h4>רמות טרופיות</h4>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-      <div class="info-box teal" style="margin:0"><strong>מין בסיסי (Basal):</strong> אוטוטרופים ומפרקים — הופכים חומר אנאורגני ואנרגיית שמש לאנרגיה כימית (הבסיס של הרשת).</div>
-      <div class="info-box coral" style="margin:0"><strong>טורף על (Top predator):</strong> בראש הרשת, כמעט אף אחד לא טורף אותו.</div>
-    </div>
-    <div class="explain" style="margin-top:.75rem;"><strong>רמה טרופית</strong> = קיבוץ תפקודי של מינים הניזונים ממשאבים דומים. כיצד קובעים? ניתוח תוכן קיבה, תצפיות וניסויים, או <em>איזוטופים יציבים</em>. </div>
-  </div>
-
-  <div class="card">
-    <h4>ויסות מלמעלה למטה מול מלמטה למעלה</h4>
-    <div class="dia-2col">
-      <div class="info-box purple" style="margin:0"><strong>מלמטה למעלה (Bottom-up):</strong> זמינות המשאב בבסיס (למשל צמחייה) קובעת כמה אפשר לקיים ברמות הגבוהות. "כמה מזון יש" מגביל את הטורפים.</div>
-      <div class="info-box amber" style="margin:0"><strong>מלמעלה למטה (Top-down):</strong> הטורפים מווסתים את גודל אוכלוסיות הטרף שלהם, ובכך משפיעים בעקיפין על הרמות שמתחת.</div>
-    </div>
-    <div class="explain">בְּרשת אמיתית שני הכיוונים פועלים יחד — השאלה היא מי <em>דומיננטי</em>. השינוי בין המצבים הוא בדיוק מה שיוצר מפלים טרופיים.</div>
-  </div>
-
-  <div class="card">
-    <h4>לומדה: מפל טרופי (Trophic cascade)</h4>
-    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.5rem;">דוגמה קלאסית מהחוף הצפון-אמריקאי: <strong>לוטרות ים → קיפודי ים → יער אצות (kelp)</strong>. הלוטרה טורפת קיפודי ים; קיפודי ים אוכלים אצות. מה קורה כשמסירים את הטורף העליון? לחצו ובדקו.</p>
-    <div class="cascade-btns">
-      <button class="btn secondary" id="cascBtn" onclick="toggleCascade()">🗑️ הסירו את הלוטרות</button>
-      <button class="btn" onclick="resetCascade()">↺ איפוס</button>
-    </div>
-    <div class="chart-wrap" style="height:260px;"><canvas id="cascadeChart" role="img" aria-label="מפל טרופי — שפע יחסי בשלוש רמות"></canvas></div>
-    <div class="explain" id="cascadeExplain"></div>
-  </div>
-
-  <div class="card">
-    <h4>מיני מפתח (Keystone species)</h4>
-    <p style="font-size:.9rem;line-height:1.75;margin-bottom:.6rem;"><strong>הניסוי הקלאסי של Robert Paine (1966):</strong> בבריכות גאות-שפל הסיר את כוכב הים הטורף <em>Pisaster</em> מחלקות ניסוי, והשווה לחלקות ביקורת. <strong>התוצאה:</strong> מספר המינים <em>ירד</em> בחלקות שממנו הוסר הטורף. <strong>המנגנון:</strong> ללא הטורף, המתחרה החזק ביותר (מידיה) השתלט ודחק החוצה מינים אחרים.</p>
-    <div class="dia-2col">
-      <div class="info-box coral" style="margin:0"><strong>מין מפתח:</strong> השפעה <em>לא-פרופורציונלית</em> על החברה ביחס לביומסה שלו. הסרתו משנה את כל החברה.</div>
-      <div class="info-box teal" style="margin:0"><strong>מין דומיננטי:</strong> משפיע על החברה <em>בזכות</em> הביומסה הגבוהה שלו. ההשפעה פרופורציונלית לשפע.</div>
-    </div>
-    <div class="explain">ההבחנה חשובה לשימור: הגנה על מין מפתח (גם אם הוא נדיר) עשויה להיות קריטית לשמירת המגוון של החברה כולה. <span style="color:var(--muted)">(Paine 1966, 1969)</span></div>
-  </div>
-</div>
-
-<!-- ============================================================ -->
-<!-- TOPIC 5 — processes, multilayer, summary, quiz -->
-<!-- ============================================================ -->
-<div id="p5" class="page">
   <div class="sec-header anim">
     <div class="sec-dot purple">🧩</div>
     <div><div class="sec-title">תהליכים, רב-שכבתיות וסיכום</div><div class="sec-sub">מה יוצר את המבנה · רשתות רב-שכבתיות · סיכום ובדיקה עצמית</div></div>
@@ -490,6 +389,6 @@
 </div>
 
 <script src="js/common.js?v=2"></script>
-<script src="js/class-4-networks.js?v=2"></script>
+<script src="js/class-4-networks.js?v=3"></script>
 </body>
 </html>

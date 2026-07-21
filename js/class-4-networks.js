@@ -1,10 +1,9 @@
 // ============================================================
 // CLASS 4 — ECOLOGICAL NETWORKS
-// showPage(), makeChart(), buildQuiz(), renderSiteNav/Subnav() are
-// shared — see js/common.js. This file wires the interactives:
-//   1. network ⇄ matrix builder  (topic 3) — uni/bi + slide toggles
-//   2. trophic cascade           (topic 4)
-//   3. self-check quiz           (topic 5)
+// showPage(), buildQuiz(), renderSiteNav/Subnav() are shared — see
+// js/common.js. This file wires the interactives:
+//   1. network ⇄ matrix builder  (topic 3) — uni/bi + dropdowns
+//   2. self-check quiz            (topic 4)
 // The lesson is conceptual: no heavy math, just the ideas.
 // ============================================================
 
@@ -15,7 +14,7 @@ const TEAL = '#0f6e56', AMBER = '#ba7517', CORAL = '#993c1d', PURPLE = '#534ab7'
 // Two modes:
 //   uni : 5-node uni-partite adjacency matrix (N×N)
 //   bi  : 4 pollinators × 3 plants incidence matrix (M×N)
-// Slide toggles switch uni/bi, binary/weighted, undirected/directed.
+// Dropdowns switch uni/bi, binary/weighted, undirected/directed.
 // Cell values hold a weight 0..3 (binary mode clamps to 0/1).
 // ============================================================
 let netMode = 'uni';       // 'uni' | 'bi'
@@ -36,7 +35,7 @@ function loadExample() {
   [[0, 1], [1, 2], [2, 4], [0, 3], [3, 4]].forEach(([i, j]) => { uniAdj[i][j] = 1; uniAdj[j][i] = 1; });
   biInc = Array.from({ length: BI_A }, () => Array(BI_P).fill(0));
   [[0, 0], [0, 1], [1, 1], [2, 1], [2, 2], [3, 0]].forEach(([a, p]) => { biInc[a][p] = 1; });
-  if (netWeighted) { uniAdj[0][1] = uniAdj[1][0] = 2; biInc[0][0] = 3; }  // a little variety when weighted
+  if (netWeighted) { uniAdj[0][1] = uniAdj[1][0] = 2; biInc[0][0] = 3; }  // some variety when weighted
 }
 
 function netWidth(w) { return netWeighted ? (w === 1 ? 2 : w === 2 ? 4 : 6) : 3; }
@@ -73,13 +72,11 @@ function renderBiSvg() {
     if (biInc[a][p] <= 0) continue;
     links += `<line x1="${BI_AX[a]}" y1="${BI_AY + BI_AR}" x2="${BI_PX[p]}" y2="${BI_PY - BI_PS / 2}" stroke="${TEAL}" stroke-width="${netWidth(biInc[a][p])}"/>`;
   }
-  let nodes = '';
+  let nodes = '';   // bipartite nodes carry no text label
   for (let a = 0; a < BI_A; a++)
-    nodes += `<circle cx="${BI_AX[a]}" cy="${BI_AY}" r="${BI_AR}" fill="#faeeda" stroke="${AMBER}" stroke-width="2.5"/>` +
-             `<text x="${BI_AX[a]}" y="${BI_AY + 4}" font-size="12" fill="${AMBER}" text-anchor="middle" font-weight="600">${a + 1}</text>`;
+    nodes += `<circle cx="${BI_AX[a]}" cy="${BI_AY}" r="${BI_AR}" fill="#faeeda" stroke="${AMBER}" stroke-width="2.5"/>`;
   for (let p = 0; p < BI_P; p++)
-    nodes += `<rect x="${BI_PX[p] - BI_PS / 2}" y="${BI_PY - BI_PS / 2}" width="${BI_PS}" height="${BI_PS}" rx="4" fill="#e1f5ee" stroke="${TEAL}" stroke-width="2.5"/>` +
-             `<text x="${BI_PX[p]}" y="${BI_PY + 4}" font-size="12" fill="${TEAL}" text-anchor="middle" font-weight="600">${p + 1}</text>`;
+    nodes += `<rect x="${BI_PX[p] - BI_PS / 2}" y="${BI_PY - BI_PS / 2}" width="${BI_PS}" height="${BI_PS}" rx="4" fill="#e1f5ee" stroke="${TEAL}" stroke-width="2.5"/>`;
   document.getElementById('netSvg').innerHTML = links + nodes +
     `<text x="140" y="20" font-size="11.5" fill="${AMBER}" text-anchor="middle" font-weight="600">מאביקים (pollinators)</text>` +
     `<text x="140" y="232" font-size="11.5" fill="${TEAL}" text-anchor="middle" font-weight="600">צמחים (plants)</text>`;
@@ -207,44 +204,32 @@ function renderExplain() {
 
 function render3() { (netMode === 'uni' ? renderUniSvg : renderBiSvg)(); renderMatrix(); renderDeg(); renderExplain(); }
 
-// ---------- toggles ----------
-function setActive(offId, onId, isOn) {
-  document.getElementById(offId).classList.toggle('active', !isOn);
-  document.getElementById(onId).classList.toggle('active', isOn);
-}
-
-function setPartite(checked) {
-  netMode = checked ? 'bi' : 'uni';
-  setActive('lblUni', 'lblBi', checked);
-  // directed is meaningful only for uni-partite networks
-  const sw = document.getElementById('swDir');
-  if (netMode === 'bi') {
-    netDirected = false; sw.checked = false; sw.disabled = true;
-    setActive('lblUndir', 'lblDir', false);
-    document.getElementById('lblUndir').classList.add('dim');
-    document.getElementById('lblDir').classList.add('dim');
+// ---------- dropdown handlers ----------
+function setPartite(bi) {
+  netMode = bi ? 'bi' : 'uni';
+  const selDir = document.getElementById('selDir');
+  if (netMode === 'bi') {          // direction is meaningless for bipartite
+    netDirected = false;
+    selDir.value = 'undir';
+    selDir.disabled = true;
   } else {
-    sw.disabled = false;
-    document.getElementById('lblUndir').classList.remove('dim');
-    document.getElementById('lblDir').classList.remove('dim');
+    selDir.disabled = false;
   }
   render3();
 }
 
-function setWeighted(checked) {
-  netWeighted = checked;
-  setActive('lblBin', 'lblW', checked);
-  if (!netWeighted) {  // clamp everything back to 0/1
+function setWeighted(w) {
+  netWeighted = w;
+  if (!netWeighted) {   // clamp everything back to 0/1
     [uniAdj, biInc].forEach(m => m.forEach(row => row.forEach((v, i) => { if (v > 0) row[i] = 1; })));
   }
   render3();
 }
 
-function setDirected(checked) {
+function setDirected(dir) {
   if (netMode === 'bi') return;
-  netDirected = checked;
-  setActive('lblUndir', 'lblDir', checked);
-  if (!netDirected) {  // symmetrize
+  netDirected = dir;
+  if (!netDirected) {   // symmetrize
     for (let i = 0; i < UNI_N; i++) for (let j = i + 1; j < UNI_N; j++) {
       const v = Math.max(uniAdj[i][j], uniAdj[j][i]); uniAdj[i][j] = uniAdj[j][i] = v;
     }
@@ -255,42 +240,7 @@ function setDirected(checked) {
 function resetNet() { loadExample(); render3(); }
 
 // ============================================================
-// TOPIC 4 — TROPHIC CASCADE (otter → urchin → kelp)
-// ============================================================
-let cascadeRemoved = false;
-
-function drawCascade() {
-  const on = !cascadeRemoved;
-  const otter = on ? 60 : 0, urchin = on ? 25 : 92, kelp = on ? 85 : 12;
-  makeChart('cascadeChart', {
-    type: 'bar',
-    data: {
-      labels: ['🦦 לוטרות ים', '🦔 קיפודי ים', '🌿 יער אצות'],
-      datasets: [{ label: 'שפע יחסי', data: [otter, urchin, kelp], backgroundColor: [CORAL, AMBER, TEAL], borderRadius: 6 }]
-    },
-    options: {
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true, max: 100, title: { display: true, text: 'שפע יחסי' } } }
-    }
-  });
-  document.getElementById('cascadeExplain').innerHTML = on
-    ? '<strong>מצב תקין:</strong> הלוטרות טורפות את קיפודי הים ושומרות על אוכלוסייתם נמוכה — כך שיער האצות משגשג. שימו לב: הלוטרה משפיעה על האצות <em>בעקיפין</em>, דרך רמה טרופית אחת באמצע. זהו ויסות <em>מלמעלה למטה</em>.'
-    : '<strong>מפל טרופי!</strong> ללא הלוטרות, קיפודי הים מתרבים ללא בקרה וכורתים את יער האצות עד להיעלמותו. השפעת הטורף העליון "מחלחלת" שתי רמות מטה ומשנה את בית-הגידול כולו — דוגמה קלאסית של מפל טרופי (Estes et al.).';
-}
-
-function toggleCascade() {
-  cascadeRemoved = !cascadeRemoved;
-  document.getElementById('cascBtn').textContent = cascadeRemoved ? '🔄 החזירו את הלוטרות' : '🗑️ הסירו את הלוטרות';
-  drawCascade();
-}
-function resetCascade() {
-  cascadeRemoved = false;
-  document.getElementById('cascBtn').textContent = '🗑️ הסירו את הלוטרות';
-  drawCascade();
-}
-
-// ============================================================
-// TOPIC 5 — SELF-CHECK QUIZ
+// TOPIC 4 — SELF-CHECK QUIZ
 // ============================================================
 function initQuiz() {
   buildQuiz(document.getElementById('quizBox'), [
@@ -299,6 +249,17 @@ function initQuiz() {
       opts: ['מין בודד במערכת', 'קשר או אינטראקציה בין שני צמתים', 'מספר הפרטים באוכלוסייה', 'רמה טרופית'],
       correct: 1,
       feedback: 'צומת = יחידה (מין/פרט/כתם); קשת = הקשר בין שני צמתים (טריפה, האבקה, הדבקה וכו\').'
+    },
+    {
+      q: 'מה מהבאים משפיע על הסבירות שנצפה באינטראקציה בין שני מינים?',
+      opts: [
+        'רק השפע היחסי של המינים',
+        'רק התאמת התכונות (למשל אורך מקור מול עומק פרח)',
+        'שפע, עיתוי (פנולוגיה) והתאמת תכונות — כולם יחד',
+        'אף אחד מהם — אינטראקציות הן אקראיות'
+      ],
+      correct: 2,
+      feedback: 'מה שאנחנו מודדים ברשת הוא תוצר של כמה מסננים: שפע (מי נפגש עם מי), עיתוי (מי פעיל מתי) והתאמת תכונות (מי "מתאים" למי).'
     },
     {
       q: 'רשת צמח–מאביק היא דוגמה קלאסית לרשת דו-צדדית (bipartite). מה מאפיין אותה?',
@@ -318,21 +279,15 @@ function initQuiz() {
       feedback: 'דרגה (k) = מספר הקשתות של צומת. ברשת מכוונת מבחינים בין דרגה נכנסת ויוצאת; ברשת משוקללת המקבילה היא "עוצמה" (strength, s) — סכום ערכי הקשתות.'
     },
     {
-      q: 'הוסר טורף עליון והדבר גרם לפריחת אוכלוסיית הטרף שלו ולקריסת הצומח שהטרף אוכל. איך נקרא התהליך?',
-      opts: ['תחרות בין-מינית', 'מפל טרופי (trophic cascade)', 'קינון', 'ויסות מלמטה למעלה'],
-      correct: 1,
-      feedback: 'מפל טרופי: השפעת הטורף "מחלחלת" מטה דרך רמה טרופית נוספת ומשנה את שפע/התנהגות הטרף-של-הטרף (למשל לוטרה→קיפוד ים→אצות).'
-    },
-    {
-      q: 'מהו ההבדל בין "מין מפתח" (keystone) ל"מין דומיננטי"?',
+      q: 'במטריצת שכנוּת (adjacency) של רשת לא-מכוונת, מה נכון?',
       opts: [
-        'אין הבדל — אלו שמות שונים לאותו דבר',
-        'מין מפתח משפיע באופן לא-פרופורציונלי לביומסה שלו; מין דומיננטי משפיע בזכות ביומסה גבוהה',
-        'מין מפתח הוא תמיד הנפוץ ביותר',
-        'מין דומיננטי נמצא תמיד בבסיס שרשרת המזון'
+        'המטריצה תמיד אסימטרית',
+        'המטריצה סימטרית: a<sub>ij</sub> = a<sub>ji</sub>, וכל קשת מופיעה פעמיים',
+        'יש בה ערכים רק על האלכסון',
+        'לא ניתן לייצג רשת לא-מכוונת כמטריצה'
       ],
       correct: 1,
-      feedback: 'מין מפתח (כמו Pisaster בניסוי של Paine) בעל השפעה עצומה על החברה גם כשהוא נדיר; מין דומיננטי משפיע בזכות שפע/ביומסה גבוהים.'
+      feedback: 'ברשת לא-מכוונת הקשר סימטרי, ולכן a<sub>ij</sub>=a<sub>ji</sub> — כל קשת מופיעה פעמיים (מעל ומתחת לאלכסון). ברשת מכוונת המטריצה יכולה להיות אסימטרית.'
     },
     {
       q: 'מהי רשת רב-שכבתית (multilayer network)?',
@@ -343,7 +298,7 @@ function initQuiz() {
         'רשת דו-צדדית בלבד'
       ],
       correct: 1,
-      feedback: 'רשת רב-שכבתית מאגדת כמה שכבות (למשל סוגי אינטראקציה שונים, עונות או אתרים) עם קשתות בין-שכבתיות. לחקירה אינטראקטיבית ראו את הכלי MiRA שבנושא 5.'
+      feedback: 'רשת רב-שכבתית מאגדת כמה שכבות (למשל סוגי אינטראקציה שונים, עונות או אתרים) עם קשתות בין-שכבתיות. לחקירה אינטראקטיבית ראו את הכלי MiRA שבנושא 4.'
     }
   ]);
 }
@@ -355,5 +310,4 @@ renderSiteNav();
 renderSubnav();
 loadExample();
 render3();
-drawCascade();
 initQuiz();
