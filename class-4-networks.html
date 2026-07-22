@@ -44,7 +44,8 @@
   .zoo-card .zoo-gloss{font-size:.72rem;color:var(--muted);margin:-.25rem 0 .5rem;}
 
   /* dropdown controls for the network builder */
-  .dd-panel{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:.25rem 0 .9rem;}
+  .dd-panel{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:flex-end;margin:.25rem 0 1rem;}
+  .dd-reset{height:37px;}
   .dd-field{display:flex;flex-direction:column;gap:4px;}
   .dd-lbl{font-size:.72rem;color:var(--muted);font-weight:600;text-align:center;}
   .dd-field select{font-family:'Heebo',sans-serif;font-size:.85rem;color:var(--text);background:var(--card);border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;cursor:pointer;min-width:180px;text-align:center;transition:border-color .15s;}
@@ -84,7 +85,8 @@
     <div class="topic-card t1" onclick="showPage('p1')"><div class="topic-num">נושא 1</div><h3>רשתות ומערכות מורכבות</h3><p>צמתים, קשתות ומבנה · מה מייצגות רשתות אקולוגיות · מערכות אדפטיביות מורכבות</p></div>
     <div class="topic-card t2" onclick="showPage('p2')"><div class="topic-num">נושא 2</div><h3>סוגי רשתות אקולוגיות</h3><p>שרשראות מזון, צמח-מאביק, פונדקאי-טפיל, פיזור, קשרים חברתיים ורשת העצים</p></div>
     <div class="topic-card t3" onclick="showPage('p3')"><div class="topic-num">נושא 3</div><h3>ייצוג רשת: צמתים, קשתות ומטריצות</h3><p>חד-צדדית מול דו-צדדית · בינארי/משוקלל · מכוון/לא-מכוון · המטריצה</p></div>
-    <div class="topic-card t4" onclick="showPage('p4')"><div class="topic-num">נושא 4</div><h3>תהליכים, רב-שכבתיות וסיכום</h3><p>מה קובע את המבנה · רשתות רב-שכבתיות (MiRA) · סיכום ובדקו את עצמכם</p></div>
+    <div class="topic-card t4" onclick="showPage('p4')"><div class="topic-num">נושא 4</div><h3>רשתות רב-שכבתיות</h3><p>מה קובע את המבנה · רשתות רב-שכבתיות (MiRA) · סיכום</p></div>
+    <div class="topic-card t1" onclick="showPage('p5')"><div class="topic-num">נושא 5</div><h3>בדקו את עצמכם</h3><p>שאלות רב-ברירה לחזרה על מושגי השיעור</p></div>
   </div>
 </div>
 
@@ -290,8 +292,8 @@
           <option value="dir">Directed · מכוון</option>
         </select>
       </label>
+      <button class="btn secondary dd-reset" onclick="resetNet()">↺ טען דוגמה מחדש</button>
     </div>
-    <div style="text-align:center;margin-bottom:1rem;"><button class="btn secondary" onclick="resetNet()">↺ טען דוגמה מחדש</button></div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;" class="netmat-grid">
       <div class="net-diagram">
@@ -315,17 +317,17 @@
 <div id="p4" class="page">
   <div class="sec-header anim">
     <div class="sec-dot purple">🧩</div>
-    <div><div class="sec-title">תהליכים, רב-שכבתיות וסיכום</div><div class="sec-sub">מה יוצר את המבנה · רשתות רב-שכבתיות · סיכום ובדיקה עצמית</div></div>
+    <div><div class="sec-title">רשתות רב-שכבתיות (Multilayer networks)</div><div class="sec-sub">מה קובע את המבנה · רשתות רב-שכבתיות · סיכום</div></div>
   </div>
 
   <div class="card">
     <h4>מה קובע את מבנה הרשת? (תהליכים)</h4>
     <p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem;">אם המבנה משפיע על יציבות ותפקוד — מה יוצר את המבנה מלכתחילה? זהו הצלע השלישית של אקולוגיית הרשתות.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-      <div class="info-box teal" style="margin:0"><strong>אקולוגיים:</strong> שפע, עיתוי (פנולוגיה) והתאמת תכונות — קובעים אילו אינטראקציות בכלל אפשריות.</div>
-      <div class="info-box amber" style="margin:0"><strong>אבולוציוניים:</strong> <em>קו-אבולוציה</em> — מינים מתפתחים זה ביחס לזה ומעצבים את הקשרים.</div>
+      <div class="info-box teal" style="margin:0"><strong>אקולוגיה:</strong> שפע, עיתוי (פנולוגיה) והתאמת תכונות — קובעים אילו אינטראקציות בכלל אפשריות.</div>
+      <div class="info-box amber" style="margin:0"><strong>אבולוציה:</strong> קו-אבולוציה — מינים מתפתחים זה ביחס לזה ומעצבים את הקשרים לאורך זמן.</div>
       <div class="info-box purple" style="margin:0"><strong>אות פילוגנטי:</strong> מינים קרובים אבולוציונית נוטים לקיים אינטראקציה עם קבוצת שותפים דומה.</div>
-      <div class="info-box coral" style="margin:0"><strong>מקריוּת + הכחדות לא-אקראיות:</strong> אילו מינים נכחדים אינו מקרי — וזה משנה את המבנה.</div>
+      <div class="info-box coral" style="margin:0"><strong>מקריות:</strong> אילו מינים נפגשים ואילו נכחדים אינו לגמרי צפוי — וגם המקריוּת מעצבת את המבנה.</div>
     </div>
     <div class="explain">כך נסגר המעגל של השיעור: <strong>כללים מיקרוסקופיים</strong> (אינטראקציות, שינויים גנטיים, דינמיקת אוכלוסיות, דינמיקה אקו-אבולוציונית, מקריות) → <strong>מבנה רשת</strong> → <strong>תכונות מקרוסקופיות</strong>: יציבות ותפקוד (האבקה, גידול, התפשטות מחוללי מחלה, בקרה ביולוגית). <span style="color:var(--muted)">(Vázquez et al. 2009; Rezende et al. 2007)</span></div>
   </div>
@@ -363,9 +365,8 @@
     </div>
 
     <a class="mira-banner" href="https://mira.ecomplab.com/" target="_blank" rel="noopener">
-      <div class="mira-k">🔗 להעמקה — כלי אינטראקטיבי</div>
       <h4>MiRA — Multilayer Interactive Rendering Application</h4>
-      <p>כלי חופשי להצגה ולחקירה אינטראקטיבית של רשתות ביולוגיות רב-שכבתיות: טעינת נתוני רשת, מגוון אלגוריתמי פריסה (Fruchterman-Reingold, Kamada-Kawai, דו-צדדי), צביעה לפי שכבות, סינון וייצוא — בלי צורך בכתיבת קוד. פותח על-ידי Nehoray, Bloch &amp; Pilosof במעבדת ה-Ecological Complexity Lab.</p>
+      <p>כלי חופשי להצגה ולחקירה אינטראקטיבית של רשתות ביולוגיות רב-שכבתיות: טעינת נתוני רשת, מגוון אלגוריתמי פריסה (Fruchterman-Reingold, Kamada-Kawai, דו-צדדי), צביעה לפי שכבות, סינון וייצוא — בלי צורך בכתיבת קוד.</p>
       <span class="mira-url">mira.ecomplab.com ↗</span>
     </a>
   </div>
@@ -377,18 +378,24 @@
       <div class="info-box amber" style="margin:0"><strong>2. לקשר ליציבות ותפקוד</strong><br>כיצד המבנה משפיע על עמידות המערכת, על האבקה או על התפשטות מחלות?</div>
       <div class="info-box purple" style="margin:0"><strong>3. להבין תהליכים</strong><br>אילו תהליכים אקולוגיים ואבולוציוניים יצרו את המבנה הזה?</div>
     </div>
-    <div class="explain" style="text-align:center;font-style:italic;">
-      « מרתק להתבונן בגדה סבוכה, עוטה צמחים מכל המינים, ציפורים שרות… כה תלויים זה בזה בדרך כה מורכבת… » — צ'רלס דרווין, 1859. <br>גישת הרשתות היא הדרך המודרנית לכמת בדיוק את ה"תלות ההדדית המורכבת" הזו.
-    </div>
   </div>
+</div>
 
+<!-- ============================================================ -->
+<!-- TOPIC 5 — self-check quiz -->
+<!-- ============================================================ -->
+<div id="p5" class="page">
+  <div class="sec-header anim">
+    <div class="sec-dot teal">✅</div>
+    <div><div class="sec-title">בדקו את עצמכם</div><div class="sec-sub">שאלות רב-ברירה לחזרה על מושגי השיעור</div></div>
+  </div>
   <div class="card">
-    <h4>בדקו את עצמכם</h4>
+    <h4>שאלות חזרה</h4>
     <div id="quizBox"></div>
   </div>
 </div>
 
-<script src="js/common.js?v=2"></script>
-<script src="js/class-4-networks.js?v=3"></script>
+<script src="js/common.js?v=3"></script>
+<script src="js/class-4-networks.js?v=5"></script>
 </body>
 </html>
